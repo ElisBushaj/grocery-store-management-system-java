@@ -1,0 +1,19 @@
+.menu_container{
+    -fx-background-color: #2f2c2c;
+}
+
+.menu_container VBox{
+    -fx-spacing: 10;
+}
+
+.menu_container Button{
+    -fx-background-color: #EEEEEE;
+    -fx-pref-width: 150;
+    -fx-pref-height: 30;
+    -fx-font-size: 14;
+}
+
+.menu_container Button :hover{
+    -fx-background-color: #f1dada;
+    -fx-pref-width: 150;
+}

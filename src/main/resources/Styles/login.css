@@ -1,0 +1,15 @@
+.login_container{
+    -fx-background-color: #EEEEEE;
+}
+
+.left_container{
+    -fx-background-color: #2f2c2c;
+}
+
+.form_container{
+    -fx-spacing: 10;
+}
+
+.login_button{
+    -fx-background-color: #2f2c2c;
+}
