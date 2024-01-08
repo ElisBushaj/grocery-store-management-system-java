@@ -1,6 +1,8 @@
 package com.grc.GroceryStore.Models;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Customer {
@@ -12,13 +14,69 @@ public class Customer {
     private final IntegerProperty points;
     private final IntegerProperty storeId;
 
-    public Customer(IntegerProperty id, StringProperty name, StringProperty lastname, StringProperty phoneNumber, StringProperty gender, IntegerProperty points, IntegerProperty storeId) {
-        this.id = id;
-        this.name = name;
-        this.lastname = lastname;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.points = points;
-        this.storeId = storeId;
+    public Customer(int id, String name, String lastname, String phoneNumber, String gender, int points, int storeId) {
+        this.id = new SimpleIntegerProperty(this, "Id", id);
+        this.name = new SimpleStringProperty(this, "Name", name);
+        this.lastname = new SimpleStringProperty(this, "Lastname", lastname);
+        this.phoneNumber = new SimpleStringProperty(this, "Phone Number", phoneNumber);
+        this.gender = new SimpleStringProperty(this, "Gender", gender);
+        this.points = new SimpleIntegerProperty(this, "Points", points);
+        this.storeId = new SimpleIntegerProperty(this, "Store Id", storeId);
+    }
+
+    public int getId() {
+        return id.get();
+    }
+
+    public IntegerProperty idProperty() {
+        return id;
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public String getLastname() {
+        return lastname.get();
+    }
+
+    public StringProperty lastnameProperty() {
+        return lastname;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber.get();
+    }
+
+    public StringProperty phoneNumberProperty() {
+        return phoneNumber;
+    }
+
+    public String getGender() {
+        return gender.get();
+    }
+
+    public StringProperty genderProperty() {
+        return gender;
+    }
+
+    public int getPoints() {
+        return points.get();
+    }
+
+    public IntegerProperty pointsProperty() {
+        return points;
+    }
+
+    public int getStoreId() {
+        return storeId.get();
+    }
+
+    public IntegerProperty storeIdProperty() {
+        return storeId;
     }
 }

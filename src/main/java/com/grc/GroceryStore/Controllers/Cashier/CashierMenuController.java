@@ -4,6 +4,7 @@ import com.grc.GroceryStore.Models.Model;
 import com.grc.GroceryStore.Views.CashierMenuOptions;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,10 +22,11 @@ public class CashierMenuController implements Initializable {
     }
 
     private void addListener(){
-        dashboard_btn.setOnAction((event -> onDashboard()));
-        sell_btn.setOnAction((event -> onSell()));
-        add_costumer_btn.setOnAction((event -> onCostumer()));
-        profile_btn.setOnAction((event -> onProfile()));
+        dashboard_btn.setOnAction(event -> onDashboard());
+        sell_btn.setOnAction(event -> onSell());
+        add_costumer_btn.setOnAction(event -> onCostumer());
+        profile_btn.setOnAction(event -> onProfile());
+        logout_btn.setOnAction(event -> onLogout());
     }
 
     private void onDashboard() {
@@ -41,5 +43,10 @@ public class CashierMenuController implements Initializable {
 
     private void onProfile(){
         Model.getInstance().getViewFactory().getClientSelectedMenuItem().set(CashierMenuOptions.PROFILE);
+    }
+
+    private void onLogout(){
+        Stage stage = (Stage) dashboard_btn.getScene().getWindow();
+        Model.getInstance().logout(stage);
     }
 }

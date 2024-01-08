@@ -17,7 +17,7 @@ public class ViewFactory {
 
 //    admin views
     private VBox adminDashboardView;
-    private VBox employView;
+    private VBox employeeView;
     private VBox stockView;
     private VBox discountView;
     private VBox pointView;
@@ -25,9 +25,9 @@ public class ViewFactory {
 
     private VBox profileView;
 
-
     private final ObjectProperty<CashierMenuOptions> clientSelectedMenuItem;
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
+
     public ViewFactory(){
         this.clientSelectedMenuItem = new SimpleObjectProperty<>();
         this.adminSelectedMenuItem = new SimpleObjectProperty<>();
@@ -89,11 +89,6 @@ public class ViewFactory {
         return profileView;
     }
 
-    public void showLoginWindow(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Login.fxml"));
-        createStage(loader);
-    }
-
 //admin View getters
     public VBox getAdminDashboardView() {
         if (adminDashboardView == null){
@@ -107,6 +102,18 @@ public class ViewFactory {
         return adminDashboardView;
     }
 
+    public VBox getEmployeeView() {
+        if (employeeView == null){
+            try {
+                employeeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Employee.fxml")).load();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+        return employeeView;
+    }
+
     public void showCashierWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Cashier/Cashier.fxml"));
         CashierController cashierController = new CashierController();
@@ -118,6 +125,11 @@ public class ViewFactory {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
         AdminController adminController = new AdminController();
         loader.setController(adminController);
+        createStage(loader);
+    }
+
+    public void showLoginWindow(){
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Login.fxml"));
         createStage(loader);
     }
 

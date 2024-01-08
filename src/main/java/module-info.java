@@ -1,6 +1,8 @@
 module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
+    requires jbcrypt;
 
 
     opens com.grc.GroceryStore to javafx.fxml;
@@ -10,4 +12,5 @@ module com.example.demo {
     exports com.grc.GroceryStore.Controllers.Cashier;
     exports com.grc.GroceryStore.Models;
     exports com.grc.GroceryStore.Views;
+    exports com.grc.GroceryStore.Utils;
 }

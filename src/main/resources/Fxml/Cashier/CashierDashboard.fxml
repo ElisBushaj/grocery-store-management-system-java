@@ -8,7 +8,7 @@
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.grc.GroceryStore.Controllers.Cashier.CashierDashboardController">
-   <Label text="Welcome Elis!">
+   <Label fx:id="welcome_lb">
       <font>
          <Font name="System Bold Italic" size="30.0"/>
       </font>
