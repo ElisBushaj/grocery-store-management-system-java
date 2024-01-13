@@ -30,6 +30,7 @@ public class AdminMenuController implements Initializable {
         dashboard_btn.setOnAction(event -> onDashboard());
         profile_btn.setOnAction(event -> onProfile());
         employee_btn.setOnAction(event -> onEmployee());
+        category_btn.setOnAction(event -> onCategories());
         logout_btn.setOnAction(event -> onLogout());
     }
 
@@ -43,6 +44,10 @@ public class AdminMenuController implements Initializable {
 
     private void onEmployee(){
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.EMPLOYEE);
+    }
+
+    private void onCategories(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.CATEGORY);
     }
 
     private void onLogout(){

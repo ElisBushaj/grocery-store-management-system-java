@@ -17,6 +17,7 @@ public class AdminController implements Initializable {
             switch (newValue){
                 case PROFILE -> setCenter(Model.getInstance().getViewFactory().getProfileView());
                 case EMPLOYEE -> setCenter(Model.getInstance().getViewFactory().getEmployeeView());
+                case CATEGORY -> setCenter(Model.getInstance().getViewFactory().getCategoryView());
                 default -> setCenter(Model.getInstance().getViewFactory().getAdminDashboardView());
             }
         }));

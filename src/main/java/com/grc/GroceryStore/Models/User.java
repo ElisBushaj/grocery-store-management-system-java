@@ -92,6 +92,11 @@ public class User {
     }
 
     public User createUserAsAdmin(String name, String lastname, String email, String role) {
+        if (!this.role.get().equals("admin")) {
+            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            return null;
+        }
+
         int storeId = Model.getInstance().getStore().getId();
         String defaultPassword = PasswordHashing.generateHashedPassword("cashier123");
         try {
@@ -123,56 +128,114 @@ public class User {
         return null; // User creation failed
     }
 
-    public boolean deleteUserByIdAsAdmin(int id) {
-        if (role.get().equals("admin")) {
-            try {
-                Connection connection = Model.getInstance().getDatabaseDriver().getConnection();
-                PreparedStatement statement = connection.prepareStatement("DELETE FROM User WHERE id = ? AND storeId = ? LIMIT 1");
-                statement.setInt(1, id);
-                statement.setInt(2, Model.getInstance().getStore().getId());
+    public User updateUserByIdAsAdmin(int id, String name, String lastname, String email, String role) {
+        if (!this.role.get().equals("admin")) {
+            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            return null;
+        }
+
+        int storeId = Model.getInstance().getStore().getId();
+        try {
+            if (userExists(id)) {
+                String query = "UPDATE User SET name = ?, lastname = ?, email = ?, role = ? WHERE id = ?";
+                PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+
+                statement.setString(1, name);
+                statement.setString(2, lastname);
+                statement.setString(3, email);
+                statement.setString(4, role);
+                statement.setInt(5, id);
 
                 int rowsAffected = statement.executeUpdate();
 
                 if (rowsAffected > 0) {
-                    return true;
+                    return new User(id, name, lastname, email, role, storeId);
+                } else {
+                    Model.showAlert("Not Found", "User with ID " + id + " not found or no changes were made.");
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            } else {
+                Model.showAlert("Not Found", "User with ID " + id + " not found.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+        // Return null if the update was not successful or an error occurred
+        return null;
+    }
+
+    // Method to check if a user with the specified ID exists
+    private boolean userExists(int userId) throws SQLException {
+        String query = "SELECT COUNT(*) FROM User WHERE id = ?";
+        PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+        statement.setInt(1, userId);
+
+        ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        int count = resultSet.getInt(1);
+
+        return count > 0;
+    }
+
+
+    public boolean deleteUserByIdAsAdmin(int id) {
+        if (!this.role.get().equals("admin")) {
+            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            return false;
+        }
+
+        try {
+            Connection connection = Model.getInstance().getDatabaseDriver().getConnection();
+            PreparedStatement statement = connection.prepareStatement("DELETE FROM User WHERE id = ? AND storeId = ? LIMIT 1");
+            statement.setInt(1, id);
+            statement.setInt(2, Model.getInstance().getStore().getId());
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         return false;
     }
 
     public ArrayList<User> getUserListAsAdmin() {
-        if (role.get().equals("admin")) {
-            try {
-                String query = "SELECT * FROM User WHERE email != ? AND storeId = ?";
-                PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
-                statement.setString(1, email.get());
-                statement.setInt(2, Model.getInstance().getStore().getId());
-
-                ResultSet resultSet = statement.executeQuery();
-
-                ArrayList<User> userList = new ArrayList<>();
-                while (resultSet.next()) {
-                    int userId = resultSet.getInt("id");
-                    String userName = resultSet.getString("name");
-                    String userLastName = resultSet.getString("lastname");
-                    String userEmail = resultSet.getString("email");
-                    String userRole = resultSet.getString("role");
-                    int userStoreId = resultSet.getInt("storeId");
-
-                    User user = new User(userId, userName, userLastName, userEmail, userRole, userStoreId);
-                    userList.add(user);
-                }
-
-                statement.close();
-                resultSet.close();
-                return userList;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        if (!this.role.get().equals("admin")) {
+            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            return null;
         }
+
+        try {
+            String query = "SELECT * FROM User WHERE email != ? AND storeId = ?";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            statement.setString(1, email.get());
+            statement.setInt(2, Model.getInstance().getStore().getId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList<User> userList = new ArrayList<>();
+            while (resultSet.next()) {
+                int userId = resultSet.getInt("id");
+                String userName = resultSet.getString("name");
+                String userLastName = resultSet.getString("lastname");
+                String userEmail = resultSet.getString("email");
+                String userRole = resultSet.getString("role");
+                int userStoreId = resultSet.getInt("storeId");
+
+                User user = new User(userId, userName, userLastName, userEmail, userRole, userStoreId);
+                userList.add(user);
+            }
+
+            statement.close();
+            resultSet.close();
+            return userList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 }

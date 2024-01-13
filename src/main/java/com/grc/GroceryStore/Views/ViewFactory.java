@@ -114,6 +114,17 @@ public class ViewFactory {
         return employeeView;
     }
 
+    public VBox getCategoryView(){
+        if(categoryView == null){
+            try{
+                categoryView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Categories.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return categoryView;
+    }
+
     public void showCashierWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Cashier/Cashier.fxml"));
         CashierController cashierController = new CashierController();
