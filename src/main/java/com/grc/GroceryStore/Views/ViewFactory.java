@@ -22,7 +22,7 @@ public class ViewFactory {
     private VBox discountView;
     private VBox pointView;
     private VBox categoryView;
-
+    private VBox storeView;
     private VBox profileView;
 
     private final ObjectProperty<CashierMenuOptions> clientSelectedMenuItem;
@@ -123,6 +123,50 @@ public class ViewFactory {
             }
         }
         return categoryView;
+    }
+
+    public VBox getStockView(){
+        if (stockView == null){
+            try {
+                stockView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Stock.fxml")).load();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return stockView;
+    }
+
+    public VBox getPointView(){
+        if(pointView == null){
+            try {
+                pointView = new FXMLLoader(getClass().getResource("/Fxml/Admin/ProductPoints.fxml")).load();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return pointView;
+    }
+
+    public VBox getDiscountView(){
+        if(discountView == null){
+            try {
+                discountView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Discount.fxml")).load();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return discountView;
+    }
+
+    public VBox getStoreView(){
+        if (storeView == null){
+            try {
+                storeView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Store.fxml")).load();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return storeView;
     }
 
     public void showCashierWindow(){

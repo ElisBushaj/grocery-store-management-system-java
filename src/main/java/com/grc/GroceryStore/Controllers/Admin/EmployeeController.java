@@ -21,7 +21,7 @@ public class EmployeeController implements Initializable {
     public Button clear_btn;
     public Button delete_btn;
     public TableView<User> employee_tbl;
-    private final ObservableList<User> users = FXCollections.observableArrayList();;
+    private final ObservableList<User> users = Model.getInstance().getStore().getUsers();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

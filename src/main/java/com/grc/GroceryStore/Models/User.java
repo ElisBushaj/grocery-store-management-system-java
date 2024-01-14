@@ -177,7 +177,6 @@ public class User {
         return count > 0;
     }
 
-
     public boolean deleteUserByIdAsAdmin(int id) {
         if (!this.role.get().equals("admin")) {
             Model.showAlert("Unauthorised", "This action can be done by an Admin.");
@@ -237,5 +236,21 @@ public class User {
         }
 
         return null;
+    }
+
+    public boolean isAdmin(boolean showAlert){
+        boolean isAdmin = this.role.get().equals("admin");
+        if (showAlert && !isAdmin){
+            Model.showAlert("Unauthorised", "You need to be an admin to complete this action.");
+        }
+        return isAdmin;
+    }
+
+    public boolean isCashier(boolean showAlert){
+        boolean isCashier = this.role.get().equals("cashier");
+        if(showAlert && !isCashier){
+            Model.showAlert("Unauthorised", "You need to be an cashier to complete this action");
+        }
+        return isCashier;
     }
 }

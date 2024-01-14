@@ -36,11 +36,12 @@ public class Model {
     }
 
     public void logout(Stage stage){
+        if(!isLoggedIn(true)) return;
         this.user = null;
         this.viewFactory.closeStage(stage);
-
         this.viewFactory = new ViewFactory();
         this.viewFactory.showLoginWindow();
+        this.store.clearLists();
     }
     public void evaluateUserCred(String email, String password) {
         ResultSet resultSet = User.getUserByEmailDB(email);
@@ -76,5 +77,13 @@ public class Model {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public boolean isLoggedIn(boolean showAlert){
+        boolean isLoggedIn = this.user != null;
+        if(showAlert && !isLoggedIn){
+            Model.showAlert("Error", "First you need to login.");
+        }
+        return isLoggedIn;
     }
 }

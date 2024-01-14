@@ -21,7 +21,7 @@ public class CategoriesController implements Initializable {
     public Button update_btn;
     public Button clear_btn;
     public Button delete_btn;
-    private final ObservableList<Category> categories = FXCollections.observableArrayList();
+    private final ObservableList<Category> categories = Model.getInstance().getStore().getCategories();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Set selection model to allow selecting only one row at a time
