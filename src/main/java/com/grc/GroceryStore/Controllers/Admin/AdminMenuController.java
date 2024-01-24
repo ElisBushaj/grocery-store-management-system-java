@@ -2,7 +2,6 @@ package com.grc.GroceryStore.Controllers.Admin;
 
 import com.grc.GroceryStore.Models.Model;
 import com.grc.GroceryStore.Views.AdminMenuOptions;
-import com.grc.GroceryStore.Views.CashierMenuOptions;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -30,7 +29,13 @@ public class AdminMenuController implements Initializable {
         dashboard_btn.setOnAction(event -> onDashboard());
         profile_btn.setOnAction(event -> onProfile());
         employee_btn.setOnAction(event -> onEmployee());
+        category_btn.setOnAction(event -> onCategories());
         logout_btn.setOnAction(event -> onLogout());
+        stock_btn.setOnAction(event -> onStock());
+        discount_btn.setOnAction(event -> onDiscount());
+        point_btn.setOnAction(event -> onPoint());
+        stock_btn.setOnAction(event -> onStock());
+        store_btn.setOnAction(event -> onStore());
     }
 
     private void onDashboard() {
@@ -43,6 +48,26 @@ public class AdminMenuController implements Initializable {
 
     private void onEmployee(){
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.EMPLOYEE);
+    }
+
+    private void onCategories(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.CATEGORY);
+    }
+
+    private void onStock(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.STOCK);
+    }
+
+    private void onDiscount(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.DISCOUNT);
+    }
+
+    private void onPoint(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.POINT);
+    }
+
+    private void onStore(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.STORE);
     }
 
     private void onLogout(){

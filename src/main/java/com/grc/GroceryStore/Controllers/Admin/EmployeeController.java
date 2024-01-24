@@ -6,14 +6,13 @@ import com.grc.GroceryStore.Utils.Validation;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class EmployeeController implements Initializable {
-    public TextField name_flc;
+    public TextField name_fld;
     public TextField last_name_fld;
     public TextField email_fld;
     public ChoiceBox<String> role_chb;
@@ -22,12 +21,7 @@ public class EmployeeController implements Initializable {
     public Button clear_btn;
     public Button delete_btn;
     public TableView<User> employee_tbl;
-    public TableColumn name_tbl_cl;
-    public TableColumn last_name_tbl_cl;
-    public TableColumn email_tbl_cl;
-    public TableColumn role_tbl_cl;
-
-    private final ObservableList<User> users = FXCollections.observableArrayList();;
+    private final ObservableList<User> users = Model.getInstance().getStore().getUsers();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -38,7 +32,7 @@ public class EmployeeController implements Initializable {
         employee_tbl.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         employee_tbl.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                name_flc.setText(newSelection.getName());
+                name_fld.setText(newSelection.getName());
                 last_name_fld.setText(newSelection.getLastname());
                 email_fld.setText(newSelection.getEmail());
                 role_chb.setValue(newSelection.getRole());
@@ -49,11 +43,6 @@ public class EmployeeController implements Initializable {
         this.users.addAll(Model.getInstance().getUser().getUserListAsAdmin());
         employee_tbl.setItems(users);
 
-        name_tbl_cl.setCellValueFactory(new PropertyValueFactory<>("name"));
-        last_name_tbl_cl.setCellValueFactory(new PropertyValueFactory<>("lastname"));
-        email_tbl_cl.setCellValueFactory(new PropertyValueFactory<>("email"));
-        role_tbl_cl.setCellValueFactory(new PropertyValueFactory<>("role"));
-
         clear_btn.setOnAction(event -> onClear());
         add_btn.setOnAction(event -> onAdd());
         delete_btn.setOnAction(event -> onDelete());
@@ -62,25 +51,29 @@ public class EmployeeController implements Initializable {
 
     public void onClear() {
         employee_tbl.getSelectionModel().clearSelection();
-        name_flc.clear();
+        name_fld.clear();
         last_name_fld.clear();
         email_fld.clear();
         role_chb.getSelectionModel().clearSelection();
     }
     public void onDelete() {
-        User selected = employee_tbl.getSelectionModel().getSelectedItem();
-        boolean isDeleted = Model.getInstance().getUser().deleteUserByIdAsAdmin(selected.getId());
+        User selectedUser = employee_tbl.getSelectionModel().getSelectedItem();
+        if(selectedUser == null){
+            Model.showAlert("Error", "Please select an user form the table to preform this action");
+            return;
+        }
+
+        boolean isDeleted = Model.getInstance().getUser().deleteUserByIdAsAdmin(selectedUser.getId());
         if(!isDeleted){
             Model.showAlert("Error", "Could not delete the employee.");
             return;
         }
 
-        this.users.remove(selected);
+        this.users.remove(selectedUser);
         onClear();
     }
-
     public void onAdd() {
-        String name = name_flc.getText().trim();
+        String name = name_fld.getText().trim();
         String lastname = last_name_fld.getText().trim();
         String email = email_fld.getText().trim();
         String role = role_chb.getValue().trim();
@@ -99,6 +92,34 @@ public class EmployeeController implements Initializable {
         this.users.add(newUser);
         onClear();
     }
+    public void onUpdate(){
+        User selectedUser = employee_tbl.getSelectionModel().getSelectedItem();
+        if(selectedUser == null){
+            Model.showAlert("Error", "Please select an user form the table to preform this action");
+            return;
+        }
 
-    public void onUpdate(){}
+        String name = name_fld.getText().trim();
+        String lastname = last_name_fld.getText().trim();
+        String email = email_fld.getText().trim();
+        String role = role_chb.getValue().trim();
+
+        if(!Validation.validateUserInput(name, lastname, email, role)){
+            Model.showAlert("Error", "Invalid Input");
+            return;
+        }
+
+        User updatedUser = Model.getInstance().getUser().updateUserByIdAsAdmin(selectedUser.getId(), name, lastname, email, role);
+        if(updatedUser == null){
+            Model.showAlert("Error", "Could not update the user.");
+            return;
+        }
+
+        selectedUser.nameProperty().set(updatedUser.getName());
+        selectedUser.lastnameProperty().set(updatedUser.getLastname());
+        selectedUser.emailProperty().set(updatedUser.getEmail());
+        selectedUser.roleProperty().set(updatedUser.getRole());
+
+        onClear();
+    }
 }
