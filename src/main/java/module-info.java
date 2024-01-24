@@ -1,4 +1,4 @@
-module com.example.demo {
+module com.grc.GroceryStore {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
