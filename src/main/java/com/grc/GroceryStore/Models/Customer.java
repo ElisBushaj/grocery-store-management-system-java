@@ -5,6 +5,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Customer {
     private final IntegerProperty id;
     private final StringProperty name;
@@ -13,6 +19,7 @@ public class Customer {
     private final StringProperty gender;
     private final IntegerProperty points;
     private final IntegerProperty storeId;
+
 
     public Customer(int id, String name, String lastname, String phoneNumber, String gender, int points, int storeId) {
         this.id = new SimpleIntegerProperty(this, "Id", id);
@@ -79,4 +86,133 @@ public class Customer {
     public IntegerProperty storeIdProperty() {
         return storeId;
     }
+    public static ArrayList<Customer> getCustomerList() {
+        try {
+            String query = "SELECT * FROM Customer WHERE storeId = ?";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            statement.setInt(1, Model.getInstance().getStore().getId());
+
+            ResultSet resultSet = statement.executeQuery();
+
+            ArrayList<Customer> customerList = new ArrayList<>();
+            while (resultSet.next()) {
+                int customerId = resultSet.getInt("id");
+                String customerName = resultSet.getString("name");
+                String customerLastName = resultSet.getString("lastname");
+                String customerPhoneNumber = resultSet.getString("phoneNumber");
+                String customerGender = resultSet.getString("gender");
+                int customerPoints = resultSet.getInt("points");
+                int customerStoreId = resultSet.getInt("storeId");
+
+                Customer customer = new Customer(customerId, customerName, customerLastName, customerPhoneNumber, customerGender, customerPoints, customerStoreId);
+                customerList.add(customer);
+            }
+
+            statement.close();
+            resultSet.close();
+            return customerList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public static boolean deleteCustomerById(int id) {
+        try {
+
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement("DELETE FROM Customer WHERE id = ? AND storeId = ? LIMIT 1");
+            statement.setInt(1, id);
+            statement.setInt(2, Model.getInstance().getStore().getId());
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return false;
+    }
+
+    public static Customer createCustomer(String name, String lastname, String phoneNumber, String gender, int points) {
+        int storeId = Model.getInstance().getStore().getId();
+
+        try {
+            String query = "INSERT INTO Customer (name, lastname, phoneNumber, gender, points, storeId) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setString(1, name);
+            statement.setString(2, lastname);
+            statement.setString(3, phoneNumber);
+            statement.setString(4, gender);
+            statement.setDouble(5, points);
+            statement.setInt(6, storeId);
+
+            int rowsInserted = statement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                // Retrieve the generated keys
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int customerId = generatedKeys.getInt(1);
+                    // Create and return a Customer object using the retrieved customer ID and other details
+                    return new Customer(customerId, name, lastname, phoneNumber, gender, points, storeId);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Customer creation failed
+    }
+
+    public static Customer updateCustomerById(int id, String name, String lastname, String phoneNumber, String gender, int points) {
+        int storeId = Model.getInstance().getStore().getId();
+
+        try {
+            if (customerExists(id)) {
+                String query = "UPDATE Customer SET name = ?, lastname = ?, phoneNumber = ?, gender = ?, points = ? WHERE id = ?";
+                PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+
+                statement.setString(1, name);
+                statement.setString(2, lastname);
+                statement.setString(3, phoneNumber);
+                statement.setString(4, gender);
+                statement.setInt(5, points);
+                statement.setInt(6, id);
+
+                int rowsAffected = statement.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    return new Customer(id, name, lastname, phoneNumber, gender, points, storeId); // Assuming points are not updated in this operation
+                } else {
+                    Model.showAlert("Not Found", "Customer with ID " + id + " not found or no changes were made.");
+                }
+            } else {
+                Model.showAlert("Not Found", "Customer with ID " + id + " not found.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Return null if the update was not successful or an error occurred
+        return null;
+    }
+
+    private static boolean customerExists(int id) throws SQLException {
+        String query = "SELECT COUNT(*) FROM Customer WHERE id = ?";
+        PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+        statement.setInt(1, id);
+
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+            int count = resultSet.getInt(1);
+            return count > 0;
+        }
+
+        return false;
+    }
+
+
 }

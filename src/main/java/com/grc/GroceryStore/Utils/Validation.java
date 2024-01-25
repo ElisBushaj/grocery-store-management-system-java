@@ -31,4 +31,24 @@ public class Validation {
     public static boolean validateUserInput(String name, String lastname, String email, String role) {
         return isValidName(name) && isValidName(lastname) && isValidRole(role) && isValidEmail(email);
     }
+
+    public static boolean validateCustomerInput(String name, String lastName, String phoneNumber, String gender, int points) {
+        return isValidName(name) && isValidName(lastName) && isValidPhoneNumber(phoneNumber) && isValidGender(gender) && isValidPoints(points);
+    }
+
+    private static boolean isValidPoints(int points) {
+        // Assuming points should be non-negative
+        return points >= 0;
+    }
+
+    private static boolean isValidGender(String gender) {
+
+        return gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("other");
+    }
+
+    private static boolean isValidPhoneNumber(String phoneNumber) {
+
+        return phoneNumber.matches("^\\d{10}$");
+    }
+
 }
