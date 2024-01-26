@@ -4,12 +4,15 @@ import java.util.regex.Matcher;
 
 public class Validation {
     private static final String EMAIL_REGEX = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
-    private static final String NAME_REGEX = "^[A-Za-z]+$";
+    private static final String TEXT_REGEX = "^[A-Za-z]+$";
     private static final String ROLE_REGEX = "^(admin|cashier)$";
 
-    public static boolean isValidName(String name) {
-        Pattern pattern = Pattern.compile(NAME_REGEX);
-        Matcher matcher = pattern.matcher(name);
+    public static boolean isValidText(String text) {
+        if(text.isEmpty()){
+            return false;
+        }
+        Pattern pattern = Pattern.compile(TEXT_REGEX);
+        Matcher matcher = pattern.matcher(text);
         return matcher.matches();
     }
 
@@ -28,12 +31,16 @@ public class Validation {
         return matcher.matches();
     }
 
+    public static boolean isValidPassword(String password){
+        return password.length() >= 8 && password.length() <= 100;
+    }
+
     public static boolean validateUserInput(String name, String lastname, String email, String role) {
-        return isValidName(name) && isValidName(lastname) && isValidRole(role) && isValidEmail(email);
+        return isValidText(name) && isValidText(lastname) && isValidRole(role) && isValidEmail(email);
     }
 
     public static boolean validateCustomerInput(String name, String lastName, String phoneNumber, String gender, int points) {
-        return isValidName(name) && isValidName(lastName) && isValidPhoneNumber(phoneNumber) && isValidGender(gender) && isValidPoints(points);
+        return isValidText(name) && isValidText(lastName) && isValidPhoneNumber(phoneNumber) && isValidGender(gender) && isValidPoints(points);
     }
 
     private static boolean isValidPoints(int points) {

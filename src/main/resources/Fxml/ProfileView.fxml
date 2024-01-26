@@ -3,34 +3,66 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="700.0" styleClass="profile_container" stylesheets="@../Styles/profile.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grc.GroceryStore.Controllers.ProfileController">
-   <Label prefHeight="0.0" prefWidth="95.0" text="Profile">
+   <Label prefHeight="0.0" prefWidth="95.0" text="Profile" textAlignment="CENTER">
       <font>
          <Font size="31.0" />
       </font>
    </Label>
-   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-      <VBox prefHeight="474.0" prefWidth="300.0" styleClass="profile_form_container">
-         <Label prefHeight="27.0" prefWidth="322.0" stylesheets="@../Styles/profile.css" text="Name"/>
-         <TextField fx:id="name_fld"/>
-         <Label prefHeight="27.0" prefWidth="308.0" text="Last Name"/>
-         <TextField fx:id="last_name_fld"/>
-         <Label prefHeight="27.0" prefWidth="300.0" text="Email"/>
-         <TextField fx:id="email_fld"/>
-         <Label prefHeight="27.0" prefWidth="307.0" fx:id="role_lb"/>
-         <Button fx:id="update_btn" mnemonicParsing="false" text="Update">
-            <VBox.margin>
-               <Insets top="10.0"/>
-            </VBox.margin>
-         </Button>
-      </VBox>
-   </HBox>
+   <AnchorPane prefHeight="550.0" prefWidth="700.0">
+      <HBox alignment="CENTER" layoutY="95.0" prefHeight="248.0" prefWidth="700.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+          <GridPane hgap="10.0" prefHeight="205.0" prefWidth="327.0" styleClass="profile_info_container" vgap="10.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="154.0" minWidth="0.0" prefWidth="100.0"/>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="10.0" prefWidth="217.0"/>
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" valignment="TOP"
+                                  vgrow="SOMETIMES"/>
+                  <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints maxHeight="30.0" minHeight="0.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                  <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" valignment="TOP"
+                                  vgrow="SOMETIMES"/>
+              </rowConstraints>
+              <Label prefHeight="17.0" prefWidth="109.0" styleClass="bold" text="Name:">
+                 <font>
+                     <Font name="System Bold Italic" size="12.0"/>
+                 </font>
+              </Label>
+              <Label fx:id="name_lb" prefHeight="27.0" prefWidth="185.0" GridPane.columnIndex="1"/>
+              <Label fx:id="email_lb" prefHeight="27.0" prefWidth="185.0" GridPane.columnIndex="1"
+                     GridPane.rowIndex="2"/>
+              <Label fx:id="last_name_lb" prefHeight="27.0" prefWidth="185.0" GridPane.columnIndex="1"
+                     GridPane.rowIndex="1"/>
+              <Label fx:id="role_lb" prefHeight="27.0" prefWidth="185.0" GridPane.columnIndex="1"
+                     GridPane.rowIndex="3"/>
+              <Label prefHeight="27.0" prefWidth="143.0" styleClass="bold" text="Last Name:" GridPane.rowIndex="1"/>
+              <Label styleClass="bold" text="Email:" GridPane.rowIndex="2"/>
+              <Label styleClass="bold" text="Role:" GridPane.rowIndex="3"/>
+          </GridPane>
+         <VBox alignment="TOP_CENTER" styleClass="profile_form_container">
+            <Label text="Old Password" />
+            <PasswordField fx:id="old_password_fld" />
+            <Label text="New Password" />
+            <PasswordField fx:id="new_password_fld" />
+            <Button fx:id="update_btn" mnemonicParsing="false" text="Update">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+         </VBox>
+      </HBox>
+   </AnchorPane>
    <padding>
-      <Insets bottom="40.0" top="40.0" />
+      <Insets top="40.0" />
    </padding>
 </VBox>

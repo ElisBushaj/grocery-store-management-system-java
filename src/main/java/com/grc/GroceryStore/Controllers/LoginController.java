@@ -13,9 +13,9 @@ import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
-    public TextField email_fld;
     public Button login_btn;
     public PasswordField password_fld;
+    public TextField email_fld;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -25,7 +25,7 @@ public class LoginController implements Initializable {
     private void onLogin() {
         String email = email_fld.getText().trim();
         if(!Validation.isValidEmail(email)){
-            Model.showAlert("Error", "Invalid Email.");
+            Model.showError("Error", "Invalid Email.");
             return;
         }
 

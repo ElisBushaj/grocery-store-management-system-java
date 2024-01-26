@@ -4,6 +4,9 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Store {
     private final IntegerProperty id;
     private final StringProperty name;
@@ -74,6 +77,15 @@ public class Store {
         return categories;
     }
 
+    public Category findCategoryById(int targetId) {
+        for (Category category : categories) {
+            if (category.getId() == targetId) {
+                return category;
+            }
+        }
+        return null;
+    }
+
     public ObservableList<Product> getProducts() {
         if(!Model.getInstance().isLoggedIn(true)){
             return null;
@@ -90,6 +102,15 @@ public class Store {
         return productPoints;
     }
 
+    public Product findProductById(int targetId) {
+        for (Product product : products) {
+            if (product.getId() == targetId) {
+                return product;
+            }
+        }
+        return null;
+    }
+
     public ObservableList<Discount> getDiscounts() {
         if(!Model.getInstance().isLoggedIn(true)){
             return null;
@@ -100,9 +121,6 @@ public class Store {
 
     public ObservableList<SoldProduct> getSoldProducts() {
         if(!Model.getInstance().isLoggedIn(true)){
-            return null;
-        }
-        if(!Model.getInstance().getUser().isAdmin(true)){
             return null;
         }
 
@@ -123,6 +141,28 @@ public class Store {
         }
 
         return customers;
+    }
+
+    public boolean updateStoreDB(String name, Double pointsPerEuro) {
+        if(!Model.getInstance().isLoggedIn(true)) return false;
+
+        String updateQuery = "UPDATE Store SET name = ?, pointsPerEuro = ? WHERE id = ?";
+        try {
+            PreparedStatement updateStatement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(updateQuery);
+            updateStatement.setString(1, name);
+            updateStatement.setDouble(2, pointsPerEuro);
+            updateStatement.setInt(3, this.getId());
+
+            int rowsAffected = updateStatement.executeUpdate();
+
+            updateStatement.close();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public void clearLists(){

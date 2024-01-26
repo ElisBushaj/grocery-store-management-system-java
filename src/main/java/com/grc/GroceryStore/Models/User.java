@@ -93,12 +93,13 @@ public class User {
 
     public User createUserAsAdmin(String name, String lastname, String email, String role) {
         if (!this.role.get().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
             return null;
         }
 
         int storeId = Model.getInstance().getStore().getId();
-        String defaultPassword = PasswordHashing.generateHashedPassword("cashier123");
+
+        String defaultPassword = PasswordHashing.generateHashedPassword("default123");
         try {
             Connection connection = Model.getInstance().getDatabaseDriver().getConnection();
             String query = "INSERT INTO User (name, lastname, email, password, role, storeId) VALUES (?, ?, ?, ?, ?, ?)";
@@ -130,7 +131,7 @@ public class User {
 
     public User updateUserByIdAsAdmin(int id, String name, String lastname, String email, String role) {
         if (!this.role.get().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
             return null;
         }
 
@@ -151,10 +152,10 @@ public class User {
                 if (rowsAffected > 0) {
                     return new User(id, name, lastname, email, role, storeId);
                 } else {
-                    Model.showAlert("Not Found", "User with ID " + id + " not found or no changes were made.");
+                    Model.showError("Not Found", "User with ID " + id + " not found or no changes were made.");
                 }
             } else {
-                Model.showAlert("Not Found", "User with ID " + id + " not found.");
+                Model.showError("Not Found", "User with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -179,7 +180,7 @@ public class User {
 
     public boolean deleteUserByIdAsAdmin(int id) {
         if (!this.role.get().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
             return false;
         }
 
@@ -203,7 +204,7 @@ public class User {
 
     public ArrayList<User> getUserListAsAdmin() {
         if (!this.role.get().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
             return null;
         }
 
@@ -241,7 +242,7 @@ public class User {
     public boolean isAdmin(boolean showAlert){
         boolean isAdmin = this.role.get().equals("admin");
         if (showAlert && !isAdmin){
-            Model.showAlert("Unauthorised", "You need to be an admin to complete this action.");
+            Model.showError("Unauthorised", "You need to be an admin to complete this action.");
         }
         return isAdmin;
     }
@@ -249,8 +250,60 @@ public class User {
     public boolean isCashier(boolean showAlert){
         boolean isCashier = this.role.get().equals("cashier");
         if(showAlert && !isCashier){
-            Model.showAlert("Unauthorised", "You need to be an cashier to complete this action");
+            Model.showError("Unauthorised", "You need to be an cashier to complete this action");
         }
         return isCashier;
+    }
+
+    public boolean isSamePassword(String password) {
+        int storeId = Model.getInstance().getStore().getId();
+
+        String query = "SELECT password FROM User WHERE id = ? AND storeId = ? LIMIT 1";
+
+        try {
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            statement.setInt(1, this.getId());
+            statement.setInt(2, storeId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String storedPassword = resultSet.getString("password");
+
+                return PasswordHashing.verifyPassword(password, storedPassword);
+            } else {
+                System.out.println("User not found.");
+            }
+
+            statement.close();
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean changePasswordDB(String newPassword) {
+        int storeId = Model.getInstance().getStore().getId();
+
+        String updateQuery = "UPDATE User SET password = ? WHERE id = ? AND storeId = ? LIMIT 1";
+
+        try {
+            PreparedStatement updateStatement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(updateQuery);
+            updateStatement.setString(1, PasswordHashing.generateHashedPassword(newPassword));
+            updateStatement.setInt(2, this.getId());
+            updateStatement.setInt(3, storeId);
+
+            int rowsAffected = updateStatement.executeUpdate();
+
+            updateStatement.close();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }

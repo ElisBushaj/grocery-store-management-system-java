@@ -4,7 +4,6 @@
 
 .profile_form_container{
     -fx-spacing: 10;
-    -fx-alignment: center;
 }
 
 .profile_form_container Button{
@@ -19,7 +18,15 @@
     -fx-pref-width: 300;
 }
 
-.profile_form_container TextField{
+.profile_form_container PasswordField{
     -fx-pref-height: 38;
     -fx-pref-width: 300;
+}
+
+.profile_info_container Label{
+    -fx-font-size: 18;
+}
+
+.profile_info_container .bold{
+    -fx-font-weight: bold;
 }

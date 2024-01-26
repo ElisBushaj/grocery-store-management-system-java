@@ -2,7 +2,6 @@ package com.grc.GroceryStore.Controllers.Cashier;
 
 import com.grc.GroceryStore.Models.Customer;
 import com.grc.GroceryStore.Models.Model;
-import com.grc.GroceryStore.Models.User;
 import com.grc.GroceryStore.Utils.Validation;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -63,13 +62,13 @@ public class CustomerController implements Initializable {
     public void onDelete() {
         Customer selectedCustomer = customer_tbl.getSelectionModel().getSelectedItem();
         if (selectedCustomer == null) {
-            Model.showAlert("Error", "Please select a customer from the table to preform this action");
+            Model.showError("Error", "Please select a customer from the table to preform this action");
             return;
         }
 
         boolean isDeleted = Customer.deleteCustomerById(selectedCustomer.getId());
         if (!isDeleted) {
-            Model.showAlert("Error", "Could not delete the customer.");
+            Model.showError("Error", "Could not delete the customer.");
             return;
         }
 
@@ -84,18 +83,18 @@ public class CustomerController implements Initializable {
         String gender = gender_chb.getValue();
         String pointsText = points_fld.getText();
         if (pointsText.isEmpty() || gender == null || name.isEmpty() || lastname.isEmpty() || phone.isEmpty()) {
-            Model.showAlert("Error", "Empty fields");
+            Model.showError("Error", "Empty fields");
             return;
         }
         int points = Integer.parseInt(points_fld.getText().trim());
         if (!Validation.validateCustomerInput(name, lastname, phone, gender, points)) {
-            Model.showAlert("Error", "Invalid Input");
+            Model.showError("Error", "Invalid Input");
             return;
         }
 
         Customer newCustomer = Customer.createCustomer(name, lastname, phone, gender, points);
         if (newCustomer == null) {
-            Model.showAlert("Error", "Could not add the customer.");
+            Model.showError("Error", "Could not add the customer.");
             return;
         }
 
@@ -106,7 +105,7 @@ public class CustomerController implements Initializable {
     public void onUpdate() {
         Customer selectedCustomer = customer_tbl.getSelectionModel().getSelectedItem();
         if (selectedCustomer == null) {
-            Model.showAlert("Error", "Please select an customer form the table to preform this action");
+            Model.showError("Error", "Please select an customer form the table to preform this action");
             return;
         }
 
@@ -117,13 +116,13 @@ public class CustomerController implements Initializable {
         int points = Integer.parseInt(points_fld.getText().trim());
 
         if (!Validation.validateCustomerInput(name, lastname, phoneNumber, gender, points)) {
-            Model.showAlert("Error", "Invalid Input");
+            Model.showError("Error", "Invalid Input");
             return;
         }
 
         Customer updatedCustomer = Customer.updateCustomerById(selectedCustomer.getId(), name, lastname, phoneNumber, gender, points);
         if (updatedCustomer == null) {
-            Model.showAlert("Error", "Could not update the customer.");
+            Model.showError("Error", "Could not update the customer.");
             return;
         }
 

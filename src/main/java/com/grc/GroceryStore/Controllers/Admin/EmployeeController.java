@@ -3,7 +3,6 @@ package com.grc.GroceryStore.Controllers.Admin;
 import com.grc.GroceryStore.Models.Model;
 import com.grc.GroceryStore.Models.User;
 import com.grc.GroceryStore.Utils.Validation;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -59,13 +58,13 @@ public class EmployeeController implements Initializable {
     public void onDelete() {
         User selectedUser = employee_tbl.getSelectionModel().getSelectedItem();
         if(selectedUser == null){
-            Model.showAlert("Error", "Please select an user form the table to preform this action");
+            Model.showError("Error", "Please select an user form the table to preform this action");
             return;
         }
 
         boolean isDeleted = Model.getInstance().getUser().deleteUserByIdAsAdmin(selectedUser.getId());
         if(!isDeleted){
-            Model.showAlert("Error", "Could not delete the employee.");
+            Model.showError("Error", "Could not delete the employee.");
             return;
         }
 
@@ -76,16 +75,16 @@ public class EmployeeController implements Initializable {
         String name = name_fld.getText().trim();
         String lastname = last_name_fld.getText().trim();
         String email = email_fld.getText().trim();
-        String role = role_chb.getValue().trim();
+        String role = role_chb.getValue();
 
         if(!Validation.validateUserInput(name, lastname, email, role)){
-            Model.showAlert("Error", "Invalid Input");
+            Model.showError("Error", "Invalid Input");
             return;
         }
 
         User newUser = Model.getInstance().getUser().createUserAsAdmin(name, lastname, email, role);
         if (newUser == null){
-            Model.showAlert("Error", "Could not add the employee.");
+            Model.showError("Error", "Could not add the employee.");
             return;
         }
 
@@ -95,7 +94,7 @@ public class EmployeeController implements Initializable {
     public void onUpdate(){
         User selectedUser = employee_tbl.getSelectionModel().getSelectedItem();
         if(selectedUser == null){
-            Model.showAlert("Error", "Please select an user form the table to preform this action");
+            Model.showError("Error", "Please select an user form the table to preform this action");
             return;
         }
 
@@ -105,13 +104,13 @@ public class EmployeeController implements Initializable {
         String role = role_chb.getValue().trim();
 
         if(!Validation.validateUserInput(name, lastname, email, role)){
-            Model.showAlert("Error", "Invalid Input");
+            Model.showError("Error", "Invalid Input");
             return;
         }
 
         User updatedUser = Model.getInstance().getUser().updateUserByIdAsAdmin(selectedUser.getId(), name, lastname, email, role);
         if(updatedUser == null){
-            Model.showAlert("Error", "Could not update the user.");
+            Model.showError("Error", "Could not update the user.");
             return;
         }
 

@@ -3,7 +3,6 @@ package com.grc.GroceryStore.Controllers.Admin;
 import com.grc.GroceryStore.Models.Category;
 import com.grc.GroceryStore.Models.Model;
 import com.grc.GroceryStore.Utils.Validation;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -49,13 +48,13 @@ public class CategoriesController implements Initializable {
     public void onDelete() {
         Category selectedCategory = category_tbl.getSelectionModel().getSelectedItem();
         if(selectedCategory == null){
-            Model.showAlert("Error", "Please select an category form the table to preform this action");
+            Model.showError("Error", "Please select an category form the table to preform this action");
             return;
         }
 
         boolean isDeleted = Category.deleteCategoryByIdAsAdmin(selectedCategory.getId());
         if(!isDeleted){
-            Model.showAlert("Error", "Could not delete the category.");
+            Model.showError("Error", "Could not delete the category.");
             return;
         }
 
@@ -65,37 +64,38 @@ public class CategoriesController implements Initializable {
     public void onAdd() {
         String name = name_fld.getText().trim();
 
-        if(!Validation.isValidName(name)){
-            Model.showAlert("Error", "Invalid Input");
+        if(!Validation.isValidText(name)){
+            Model.showError("Error", "Invalid Input");
             return;
         }
 
         Category newCategory = Category.createCategoryAsAdmin(name);
         if (newCategory == null){
-            Model.showAlert("Error", "Could not add the category.");
+            Model.showError("Error", "Could not add the category.");
             return;
         }
 
         this.categories.add(newCategory);
         onClear();
     }
+
     public void onUpdate(){
         Category selectedCategory = category_tbl.getSelectionModel().getSelectedItem();
         if(selectedCategory == null){
-            Model.showAlert("Error", "Please select an category form the table to preform this action");
+            Model.showError("Error", "Please select an category form the table to preform this action");
             return;
         }
 
         String name = name_fld.getText().trim();
 
-        if(!Validation.isValidName(name)){
-            Model.showAlert("Error", "Invalid Input");
+        if(!Validation.isValidText(name)){
+            Model.showError("Error", "Invalid Input");
             return;
         }
 
         Category updatedCategory = Category.updateCategoryByIdAsAdmin(selectedCategory.getId(), name);
         if(updatedCategory == null){
-            Model.showAlert("Error", "Could not update the user.");
+            Model.showError("Error", "Could not update the user.");
             return;
         }
 

@@ -16,7 +16,7 @@
     <padding>
         <Insets top="30.0" />
     </padding>
-    <Label styleClass="title" text="Products">
+    <Label styleClass="title" text="Stock">
         <font>
             <Font size="30.0" />
         </font>
@@ -50,8 +50,8 @@
                     </cellValueFactory>
                 </TableColumn>
                 <TableColumn prefWidth="75.0" text="Category">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="categoryId" />
+                    <cellValueFactory >
+                        <PropertyValueFactory property="category" />
                     </cellValueFactory>
                 </TableColumn>
             </columns>

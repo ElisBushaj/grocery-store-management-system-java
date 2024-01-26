@@ -46,9 +46,11 @@ public class Category {
     }
 
     public static ArrayList<Category> getCategoriesListAsAdmin() {
+        ArrayList<Category> categoriesList = new ArrayList<>();
+
         if (!Model.getInstance().getUser().getRole().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
-            return null;
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
+            return categoriesList;
         }
 
         try {
@@ -58,7 +60,6 @@ public class Category {
 
             ResultSet resultSet = statement.executeQuery();
 
-            ArrayList<Category> categoriesList = new ArrayList<>();
             while (resultSet.next()) {
                 int categoryId = resultSet.getInt("id");
                 String categoryName = resultSet.getString("name");
@@ -75,12 +76,12 @@ public class Category {
             e.printStackTrace();
         }
 
-        return null;
+        return categoriesList;
     }
 
     public static boolean deleteCategoryByIdAsAdmin(int id) {
         if (!Model.getInstance().getUser().getRole().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
             return false;
         }
 
@@ -98,7 +99,7 @@ public class Category {
                 return true;
             } else {
                 // Handle the case where no rows were affected (category with the specified ID not found)
-                Model.showAlert("Error", "Category with ID " + id + " not found.");
+                Model.showError("Error", "Category with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -110,7 +111,7 @@ public class Category {
 
     public static Category createCategoryAsAdmin(String categoryName) {
         if (!Model.getInstance().getUser().getRole().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
             return null;
         }
 
@@ -133,7 +134,7 @@ public class Category {
                     return new Category(generatedCategoryId, categoryName, Model.getInstance().getStore().getId());
                 }
             } else {
-                Model.showAlert("Error", "Failed to create the category.");
+                Model.showError("Error", "Failed to create the category.");
             }
 
             insertStatement.close();
@@ -146,7 +147,7 @@ public class Category {
     }
     public static Category updateCategoryByIdAsAdmin(int categoryId, String newName) {
         if (!Model.getInstance().getUser().getRole().equals("admin")) {
-            Model.showAlert("Unauthorised", "This action can be done by an Admin.");
+            Model.showError("Unauthorised", "This action can be done by an Admin.");
             return null;
         }
 
@@ -165,7 +166,7 @@ public class Category {
                 // Category successfully updated, retrieve the updated category
                 return getCategoryById(categoryId);
             } else {
-                Model.showAlert("Error", "Category with ID " + categoryId + " not found or no changes were made.");
+                Model.showError("Error", "Category with ID " + categoryId + " not found or no changes were made.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -192,4 +193,10 @@ public class Category {
 
         // Return null if the category with the specified ID is not found
         return null;
-    }}
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+}

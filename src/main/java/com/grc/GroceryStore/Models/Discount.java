@@ -1,19 +1,16 @@
 package com.grc.GroceryStore.Models;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 
 public class Discount {
     private final IntegerProperty id;
-    private final IntegerProperty productId;
+    private final ObjectProperty<Product> product;
     private final DoubleProperty percentage;
     private final IntegerProperty storeId;
 
-    public Discount(int id, int productId, double percentage, int storeId) {
+    public Discount(int id, Product product, double percentage, int storeId) {
         this.id = new SimpleIntegerProperty(this, "Id", id);
-        this.productId = new SimpleIntegerProperty(this, "Product Id", id);
+        this.product = new SimpleObjectProperty<>(this, "Product", product);
         this.percentage = new SimpleDoubleProperty(this, "Percentage", percentage);
         this.storeId = new SimpleIntegerProperty(this, "Store Id", storeId);
     }
@@ -24,14 +21,6 @@ public class Discount {
 
     public IntegerProperty idProperty() {
         return id;
-    }
-
-    public int getProductId() {
-        return productId.get();
-    }
-
-    public IntegerProperty productIdProperty() {
-        return productId;
     }
 
     public double getPercentage() {
@@ -49,4 +38,14 @@ public class Discount {
     public IntegerProperty storeIdProperty() {
         return storeId;
     }
+
+    public Product getProduct() {
+        return product.get();
+    }
+
+    public ObjectProperty<Product> productProperty() {
+        return product;
+    }
+
+
 }

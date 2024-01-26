@@ -1,8 +1,10 @@
 package com.grc.GroceryStore.Controllers.Admin;
 
 import com.grc.GroceryStore.Models.Category;
+import com.grc.GroceryStore.Models.Model;
 import com.grc.GroceryStore.Models.Product;
-import javafx.collections.FXCollections;
+import com.grc.GroceryStore.Utils.CustomField;
+import com.grc.GroceryStore.Utils.Validation;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -22,11 +24,19 @@ public class StockController implements Initializable {
     public Button clear_btn;
     public Button delete_btn;
     public TableView<Product> products_tbl;
-    private final ObservableList<Product> products = FXCollections.observableArrayList();
+    private final ObservableList<Product> products = Model.getInstance().getStore().getProducts();
+    private final ObservableList<Category> categories = Model.getInstance().getStore().getCategories();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        category_chb.getItems().addAll(Category.getCategoriesListAsAdmin());
+        if(categories.isEmpty()){
+            categories.addAll(Category.getCategoriesListAsAdmin());
+        }
+
+        category_chb.getItems().addAll(categories);
+
+        CustomField.intField(stock_fld);
+        CustomField.doubleField(price_fld);
 
         // Set selection model to allow selecting only one row at a time
         products_tbl.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -34,17 +44,21 @@ public class StockController implements Initializable {
             if (newSelection != null) {
                 name_fld.setText(newSelection.getName());
                 description_fld.setText(newSelection.getDescription());
+                price_fld.setText(Double.toString(newSelection.getPrice()));
+                stock_fld.setText(Integer.toString(newSelection.getStock()));
+                supplier_fld.setText(newSelection.getSupplierInfo());
+                category_chb.setValue(newSelection.categoryProperty().get());
             }
         });
 
         this.products.clear();
-//        this.products.addAll(Product.getUserListAsAdmin());
+        this.products.addAll(Product.getProductListDB());
         products_tbl.setItems(products);
 
         clear_btn.setOnAction(event -> onClear());
-//        add_btn.setOnAction(event -> onAdd());
-//        delete_btn.setOnAction(event -> onDelete());
-//        update_btn.setOnAction(event -> onUpdate());
+        add_btn.setOnAction(event -> onAdd());
+        delete_btn.setOnAction(event -> onDelete());
+        update_btn.setOnAction(event -> onUpdate());
     }
 
     public void onClear() {
@@ -52,72 +66,111 @@ public class StockController implements Initializable {
         name_fld.clear();
         description_fld.clear();
         price_fld.clear();
+        stock_fld.clear();
         category_chb.getSelectionModel().clearSelection();
+        supplier_fld.clear();
     }
-//    public void onDelete() {
-//        User selectedUser = products_tbl.getSelectionModel().getSelectedItem();
-//        if(selectedUser == null){
-//            Model.showAlert("Error", "Please select a user form the table to preform this action");
-//            return;
-//        }
-//
-//        boolean isDeleted = Model.getInstance().getUser().deleteUserByIdAsAdmin(selectedUser.getId());
-//        if(!isDeleted){
-//            Model.showAlert("Error", "Could not delete the employee.");
-//            return;
-//        }
-//
-//        this.products.remove(selectedUser);
-//        onClear();
-//    }
-//    public void onAdd() {
-//        String name = name_fld.getText().trim();
-//        String lastname = description_fld.getText().trim();
-//        String email = price_fld.getText().trim();
-//        String role = category_chb.getValue().trim();
-//
-//        if(!Validation.validateUserInput(name, lastname, email, role)){
-//            Model.showAlert("Error", "Invalid Input");
-//            return;
-//        }
-//
-//        User newUser = Model.getInstance().getUser().createUserAsAdmin(name, lastname, email, role);
-//        if (newUser == null){
-//            Model.showAlert("Error", "Could not add the employee.");
-//            return;
-//        }
-//
-//        this.products.add(newUser);
-//        onClear();
-//    }
-//    public void onUpdate(){
-//        User selectedUser = products_tbl.getSelectionModel().getSelectedItem();
-//        if(selectedUser == null){
-//            Model.showAlert("Error", "Please select a user form the table to preform this action");
-//            return;
-//        }
-//
-//        String name = name_fld.getText().trim();
-//        String lastname = description_fld.getText().trim();
-//        String email = price_fld.getText().trim();
-//        String role = category_chb.getValue().trim();
-//
-//        if(!Validation.validateUserInput(name, lastname, email, role)){
-//            Model.showAlert("Error", "Invalid Input");
-//            return;
-//        }
-//
-//        User updatedUser = Model.getInstance().getUser().updateUserByIdAsAdmin(selectedUser.getId(), name, lastname, email, role);
-//        if(updatedUser == null){
-//            Model.showAlert("Error", "Could not update the user.");
-//            return;
-//        }
-//
-//        selectedUser.nameProperty().set(updatedUser.getName());
-//        selectedUser.lastnameProperty().set(updatedUser.getLastname());
-//        selectedUser.emailProperty().set(updatedUser.getEmail());
-//        selectedUser.roleProperty().set(updatedUser.getRole());
-//
-//        onClear();
-//    }
+    public void onDelete() {
+        Product selectedProduct = products_tbl.getSelectionModel().getSelectedItem();
+        if(selectedProduct == null){
+            Model.showError("Error", "Please select a product form the table to preform this action");
+            return;
+        }
+
+        boolean isDeleted = Product.deleteProductByIdAsAdmin(selectedProduct.getId());
+        if(!isDeleted){
+            Model.showError("Error", "Could not delete the product.");
+            return;
+        }
+
+        this.products.remove(selectedProduct);
+        onClear();
+    }
+    public void onAdd() {
+        String name = name_fld.getText().trim();
+        String description = description_fld.getText().trim();
+        String supplierInfo = supplier_fld.getText().trim();
+        String priceString = price_fld.getText();
+        String stockString = stock_fld.getText();
+        Category category = category_chb.getValue();
+
+        if(name.isEmpty() || description.isEmpty() || supplierInfo.isEmpty() || priceString.isEmpty() || stockString.isEmpty() || category == null){
+            Model.showError("Error", "Empty fields");
+            return;
+        }
+
+        double price = Double.parseDouble(priceString);
+        int stock = Integer.parseInt(stockString);
+
+        if(!Validation.isValidText(name)){
+            Model.showError("Error", "Invalid name input, use only text.");
+            return;
+        }
+
+        if(!Validation.isValidText(description)){
+            Model.showError("Error", "Invalid description input, use only text.");
+            return;
+        }
+
+        if (!Validation.isValidText(supplierInfo)){
+            Model.showError("Error", "Invalid supplier input, use only text.");
+            return;
+        }
+
+        Product newProduct = Product.createProductAsAdmin(category.getId(), name, description, price, stock, supplierInfo);
+        if(newProduct == null){
+            Model.showError("Error", "Could not create the product.");
+            return;
+        }
+
+        products.add(newProduct);
+        onClear();
+    }
+
+    public void onUpdate(){
+        Product selectedProduct = products_tbl.getSelectionModel().getSelectedItem();
+        if(selectedProduct == null){
+            Model.showError("Error", "Please select a product form the table to preform this action");
+            return;
+        }
+
+        String name = name_fld.getText().trim();
+        String description = description_fld.getText().trim();
+        String supplierInfo = supplier_fld.getText().trim();
+        String priceString = price_fld.getText();
+        String stockString = stock_fld.getText();
+        Category category = category_chb.getValue();
+
+        if(name.isEmpty() || description.isEmpty() || supplierInfo.isEmpty() || priceString.isEmpty() || stockString.isEmpty() || category == null){
+            Model.showError("Error", "Empty fields");
+            return;
+        }
+
+        double price = Double.parseDouble(priceString);
+        int stock = Integer.parseInt(stockString);
+
+        if(!Validation.isValidText(name)){
+            Model.showError("Error", "Invalid name input, use only text.");
+            return;
+        }
+
+        if(!Validation.isValidText(description)){
+            Model.showError("Error", "Invalid description input, use only text.");
+            return;
+        }
+
+        if (!Validation.isValidText(supplierInfo)){
+            Model.showError("Error", "Invalid supplier input, use only text.");
+            return;
+        }
+
+        Product updatedProduct = Product.updateProductAsAdmin(selectedProduct.getId(), category.getId(), name, description, price, stock, supplierInfo);
+        if(updatedProduct == null){
+            Model.showError("Error", "Could not update the product.");
+            return;
+        }
+
+        products.set(products.indexOf(selectedProduct), updatedProduct);
+        onClear();
+    }
 }

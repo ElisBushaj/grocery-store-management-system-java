@@ -56,7 +56,7 @@ public class Model {
                 );
 
             } else {
-                showAlert("Login Failed", "Invalid email or password.");
+                showError("Login Failed", "Invalid email or password.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,8 +71,11 @@ public class Model {
         return store;
     }
 
-    public static void showAlert(String title,String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+    public static void showError(String title, String message) {
+        showAlert(title, message, Alert.AlertType.ERROR);
+    }
+    public static void showAlert(String title, String message, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
@@ -82,7 +85,7 @@ public class Model {
     public boolean isLoggedIn(boolean showAlert){
         boolean isLoggedIn = this.user != null;
         if(showAlert && !isLoggedIn){
-            Model.showAlert("Error", "First you need to login.");
+            Model.showError("Error", "First you need to login.");
         }
         return isLoggedIn;
     }

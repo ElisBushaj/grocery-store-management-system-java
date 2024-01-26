@@ -9,7 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Customer {
     private final IntegerProperty id;
@@ -87,6 +86,8 @@ public class Customer {
         return storeId;
     }
     public static ArrayList<Customer> getCustomerList() {
+        ArrayList<Customer> customerList = new ArrayList<>();
+
         try {
             String query = "SELECT * FROM Customer WHERE storeId = ?";
             PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
@@ -94,7 +95,6 @@ public class Customer {
 
             ResultSet resultSet = statement.executeQuery();
 
-            ArrayList<Customer> customerList = new ArrayList<>();
             while (resultSet.next()) {
                 int customerId = resultSet.getInt("id");
                 String customerName = resultSet.getString("name");
@@ -110,13 +110,13 @@ public class Customer {
 
             statement.close();
             resultSet.close();
-            return customerList;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return customerList;
     }
+
     public static boolean deleteCustomerById(int id) {
         try {
 
@@ -187,10 +187,10 @@ public class Customer {
                 if (rowsAffected > 0) {
                     return new Customer(id, name, lastname, phoneNumber, gender, points, storeId); // Assuming points are not updated in this operation
                 } else {
-                    Model.showAlert("Not Found", "Customer with ID " + id + " not found or no changes were made.");
+                    Model.showError("Not Found", "Customer with ID " + id + " not found or no changes were made.");
                 }
             } else {
-                Model.showAlert("Not Found", "Customer with ID " + id + " not found.");
+                Model.showError("Not Found", "Customer with ID " + id + " not found.");
             }
         } catch (SQLException e) {
             e.printStackTrace();

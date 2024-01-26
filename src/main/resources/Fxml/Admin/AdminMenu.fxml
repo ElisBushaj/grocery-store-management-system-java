@@ -6,32 +6,28 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox styleClass="menu_container" stylesheets="@../../Styles/menu.css" xmlns="http://javafx.com/javafx/21"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.grc.GroceryStore.Controllers.Admin.AdminMenuController">
-    <AnchorPane prefHeight="600.0" prefWidth="200.0">
+<VBox styleClass="menu_container" stylesheets="@../../Styles/menu.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grc.GroceryStore.Controllers.Admin.AdminMenuController">
+    <AnchorPane prefHeight="600.0" VBox.vgrow="ALWAYS">
         <VBox alignment="CENTER" prefHeight="129.0" prefWidth="200.0">
             <Label prefHeight="21.0" prefWidth="121.0" text="Grocery Store" textFill="WHITE">
                 <font>
-                    <Font size="20.0"/>
+                    <Font size="20.0" />
                 </font>
             </Label>
         </VBox>
         <VBox alignment="TOP_CENTER" layoutY="131.0" prefHeight="339.0" prefWidth="200.0">
-            <Button fx:id="dashboard_btn" mnemonicParsing="false" text="Dashboard"/>
-            <Button fx:id="stock_btn" mnemonicParsing="false" text="Stock"/>
-            <Button fx:id="category_btn" mnemonicParsing="false" text="Category"/>
-            <Button fx:id="discount_btn" mnemonicParsing="false" text="Discount"/>
-            <Button fx:id="point_btn" mnemonicParsing="false" text="Point"/>
-            <Button fx:id="employee_btn" mnemonicParsing="false"
-                    text="Employee"/>
-            <Button fx:id="store_btn" mnemonicParsing="false" text="Store"/>
+            <Button fx:id="dashboard_btn" mnemonicParsing="false" text="Dashboard" />
+            <Button fx:id="stock_btn" mnemonicParsing="false" text="Stock" />
+            <Button fx:id="category_btn" mnemonicParsing="false" text="Category" />
+            <Button fx:id="discount_btn" mnemonicParsing="false" text="Discount" />
+            <Button fx:id="point_btn" mnemonicParsing="false" text="Point" />
+            <Button fx:id="employee_btn" mnemonicParsing="false" text="Employee" />
+            <Button fx:id="store_btn" mnemonicParsing="false" text="Store" />
 
         </VBox>
-        <VBox alignment="CENTER" layoutY="482.0" prefHeight="118.0" prefWidth="200.0">
-            <Button fx:id="profile_btn" mnemonicParsing="false" text="Profile"/>
-            <Button fx:id="logout_btn" mnemonicParsing="false" text="Log Out"/>
+        <VBox alignment="CENTER" layoutY="482.0" prefHeight="118.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0">
+            <Button fx:id="profile_btn" mnemonicParsing="false" text="Profile" />
+            <Button fx:id="logout_btn" mnemonicParsing="false" text="Log Out" />
         </VBox>
     </AnchorPane>
 </VBox>

@@ -14,11 +14,11 @@ public class Receipt {
 
     public Receipt(int id, int customerId, int userId, Date date, double price, int storeId) {
         this.id = new SimpleIntegerProperty(this, "Id", id);
-        this.customerId = new SimpleIntegerProperty(this, "Customer Id", customerId);;
-        this.userId = new SimpleIntegerProperty(this, "User Id", userId);;
+        this.customerId = new SimpleIntegerProperty(this, "Customer Id", customerId);
+        this.userId = new SimpleIntegerProperty(this, "User Id", userId);
         this.date = new SimpleObjectProperty<>(this, "Date", date);
-        this.price = new SimpleDoubleProperty(this, "Price", price);;
-        this.storeId = new SimpleIntegerProperty(this, "Store Id", storeId);;
+        this.price = new SimpleDoubleProperty(this, "Price", price);
+        this.storeId = new SimpleIntegerProperty(this, "Store Id", storeId);
     }
 
     public int getId() {

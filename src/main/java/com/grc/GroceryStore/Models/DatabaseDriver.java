@@ -34,7 +34,7 @@ public class DatabaseDriver {
                 System.out.println("Existing storeId retrieved from the Store table: " + store.getId());
             } else {
                 // No store found, insert a new row into the Store table
-                statement.executeUpdate("INSERT INTO Store (name, pointsPerEuro) VALUES ('ERE-Store', 0)", Statement.RETURN_GENERATED_KEYS);
+                statement.executeUpdate("INSERT INTO Store (name, pointsPerEuro) VALUES ('GRC-Store', 0)", Statement.RETURN_GENERATED_KEYS);
                 System.out.println("Inserted a new row into Store table.");
 
                 // Retrieve the generated storeId

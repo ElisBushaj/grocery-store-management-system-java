@@ -28,6 +28,7 @@ public class ViewFactory {
     private final ObjectProperty<CashierMenuOptions> clientSelectedMenuItem;
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
 
+
     public ViewFactory(){
         this.clientSelectedMenuItem = new SimpleObjectProperty<>();
         this.adminSelectedMenuItem = new SimpleObjectProperty<>();
@@ -126,35 +127,31 @@ public class ViewFactory {
     }
 
     public VBox getStockView(){
-        if (stockView == null){
-            try {
-                stockView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Stock.fxml")).load();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            stockView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Stock.fxml")).load();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return stockView;
     }
 
     public VBox getPointView(){
-        if(pointView == null){
-            try {
-                pointView = new FXMLLoader(getClass().getResource("/Fxml/Admin/ProductPoints.fxml")).load();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            pointView = new FXMLLoader(getClass().getResource("/Fxml/Admin/ProductPoints.fxml")).load();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return pointView;
     }
 
     public VBox getDiscountView(){
-        if(discountView == null){
-            try {
-                discountView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Discount.fxml")).load();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            discountView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Discount.fxml")).load();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return discountView;
     }
 
