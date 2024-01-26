@@ -2,6 +2,12 @@ package com.grc.GroceryStore.Models;
 
 import javafx.beans.property.*;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 public class Discount {
     private final IntegerProperty id;
     private final ObjectProperty<Product> product;
@@ -14,6 +20,68 @@ public class Discount {
         this.percentage = new SimpleDoubleProperty(this, "Percentage", percentage);
         this.storeId = new SimpleIntegerProperty(this, "Store Id", storeId);
     }
+
+    public static ArrayList<Discount> getDiscountsDB() {
+        System.out.println("1");
+        ArrayList<Discount> discounts = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM Discount WHERE storeId=?";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            statement.setInt(1, Model.getInstance().getStore().getId());
+            ResultSet resultSet = statement.executeQuery();
+            System.out.println("2");
+            while (resultSet.next()) {
+                int productId = resultSet.getInt("productId");
+                Product product = Model.getInstance().getStore().findProductById(productId);
+                System.out.println("3");
+                if (product == null) {
+                    discounts.clear();
+                    return discounts;
+                }
+                Discount discount = new Discount(resultSet.getInt("id"), product, resultSet.getDouble("percentage"), Model.getInstance().getStore().getId());
+                discounts.add(discount);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        System.out.println("4");
+
+        return discounts;
+    }
+
+    public static Discount createDiscountAsAdmin(double percentage, int productId) {
+
+
+        try {
+            String query = "INSERT INTO Discount (productId, percentage, storeId) VALUES (?, ?, ?)";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            statement.setInt(1, productId);
+            statement.setDouble(2, percentage);
+            statement.setInt(3, Model.getInstance().getStore().getId());
+
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating discount failed, no rows affected.");
+            }
+
+            // Retrieve the generated discount ID
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int discountId = generatedKeys.getInt(1);
+                Product product = Model.getInstance().getStore().findProductById(productId);
+                return new Discount(discountId, product, percentage, Model.getInstance().getStore().getId());
+            } else {
+                throw new SQLException("Creating discount failed, no ID obtained.");
+            }
+        } catch (SQLException e) {
+            // Handle SQL exception appropriately
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     public int getId() {
         return id.get();
@@ -48,4 +116,50 @@ public class Discount {
     }
 
 
+    public static boolean deleteDiscountByIdDB(int discountId) {
+
+        try {
+            String query = "DELETE FROM Discount WHERE id = ? AND storeId = ?";
+
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            statement.setInt(1, discountId);
+            statement.setInt(2,Model.getInstance().getStore().getId());
+
+            // Execute the delete statement
+            int rowsAffected = statement.executeUpdate();
+
+            // Check if the deletion was successful
+            if (rowsAffected > 0) {
+                return true;
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+     public static boolean updateDiscountDB (int id , double percentage,int productId){
+
+         if (!Model.getInstance().getUser().isAdmin(true)) {
+             return false;
+         }
+         try {
+             String query = "UPDATE Discount SET percentage = ? WHERE id = ? AND productId = ? AND storeId = ?";
+             PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+             statement.setDouble(1,percentage);
+             statement.setInt(2, id);
+             statement.setInt(3, productId);
+             statement.setInt(4, Model.getInstance().getStore().getId());
+
+             int rowsAffected = statement.executeUpdate();
+             statement.close();
+
+             return rowsAffected > 0;
+         } catch (SQLException e) {
+             e.printStackTrace();
+             return false;
+     }
+    }
 }
+

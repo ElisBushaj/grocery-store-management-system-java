@@ -168,15 +168,11 @@ public class ViewFactory {
 
     public void showCashierWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Cashier/Cashier.fxml"));
-        CashierController cashierController = new CashierController();
-        loader.setController(cashierController);
         createStage(loader);
     }
 
     public void showAdminWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
-        AdminController adminController = new AdminController();
-        loader.setController(adminController);
         createStage(loader);
     }
 
