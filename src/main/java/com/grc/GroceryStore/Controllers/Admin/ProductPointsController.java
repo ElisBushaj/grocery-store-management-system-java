@@ -28,7 +28,7 @@ public class ProductPointsController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (categories.isEmpty()){
-            categories.addAll(Category.getCategoriesListAsAdmin());
+            categories.addAll(Category.getCategoriesDB());
         }
 
         if (products.isEmpty()){

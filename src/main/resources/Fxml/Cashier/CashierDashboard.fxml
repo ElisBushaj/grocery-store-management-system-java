@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
@@ -8,34 +11,59 @@
 
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grc.GroceryStore.Controllers.Cashier.CashierDashboardController">
    <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-      <Label layoutX="610.0" layoutY="38.0" text="Cashier">
+      <Label layoutX="610.0" layoutY="38.0" text="Cashier" textFill="#090909">
          <font>
-            <Font name="System Bold" size="15.0"/>
+            <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <Label fx:id="welcome_lb" layoutX="35.0" layoutY="26.0" prefHeight="45.0" prefWidth="215.0" text="Welcome Elis">
+      <Label fx:id="welcome_lb" layoutX="35.0" layoutY="26.0" prefHeight="45.0" prefWidth="215.0">
          <font>
-            <Font name="System Bold Italic" size="30.0"/>
+            <Font name="System Bold Italic" size="30.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="140.0" layoutX="163.0" layoutY="170.0"
-                 stroke="BLACK" strokeType="INSIDE" width="179.0"/>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="140.0" layoutX="161.0" layoutY="345.0"
-                 stroke="BLACK" strokeType="INSIDE" width="179.0"/>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="140.0" layoutX="383.0" layoutY="345.0"
-                 stroke="BLACK" strokeType="INSIDE" width="179.0"/>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="140.0" layoutX="383.0" layoutY="170.0"
-                 stroke="BLACK" strokeType="INSIDE" width="179.0"/>
-      <Label layoutX="179.0" layoutY="188.0" text="Total "/>
-      <Label fx:id="total_profit_lb" layoutX="167.0" layoutY="212.0" text="600$">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dbe0d7" height="91.0" layoutX="479.0" layoutY="452.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
+      <Label layoutX="493.0" layoutY="463.0" prefHeight="17.0" prefWidth="117.0" text=" Total Sales (in Eur) :" textOverrun="LEADING_ELLIPSIS">
          <font>
-            <Font size="39.0"/>
+            <Font name="Arial" size="12.0" />
+         </font></Label>
+      <Label fx:id="total_profit_lb" layoutX="568.0" layoutY="481.0" prefHeight="33.0" prefWidth="64.0">
+         <font>
+            <Font size="22.0" />
          </font>
       </Label>
-      <Label layoutX="404.0" layoutY="188.0" text="Total sold products"/>
-      <Label fx:id="total_sold_product_lb" layoutX="404.0" layoutY="221.0" text="4">
+      <TableView fx:id="dashboard_tb" layoutX="71.0" layoutY="130.0" prefHeight="321.0" prefWidth="579.0">
+        <columns>
+           <TableColumn prefWidth="288.6665954589844" text="Product">
+              <cellValueFactory>
+                 <PropertyValueFactory property="product" />
+              </cellValueFactory>
+           </TableColumn>
+           <TableColumn prefWidth="290.666748046875" text="Price">
+              <cellValueFactory>
+                 <PropertyValueFactory property="price" />
+              </cellValueFactory>
+           </TableColumn>
+        </columns>
+      </TableView>
+      <Label layoutX="610.0" layoutY="15.0" text="Role:">
          <font>
-            <Font size="39.0"/>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="292.0" layoutY="94.0" prefHeight="36.0" prefWidth="155.0" text="Sold products" textOverrun="LEADING_ELLIPSIS">
+         <font>
+            <Font name="Arial" size="22.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dbe0d7" height="91.0" layoutX="299.0" layoutY="452.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
+      <Label layoutX="322.0" layoutY="463.0" prefHeight="17.0" prefWidth="137.0" text="Your total sold products:" textOverrun="LEADING_ELLIPSIS">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="total_profit_lb2" layoutX="395.0" layoutY="487.0" prefHeight="33.0" prefWidth="64.0">
+         <font>
+            <Font size="22.0" />
          </font>
       </Label>
    </AnchorPane>

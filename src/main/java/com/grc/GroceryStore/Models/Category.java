@@ -45,13 +45,8 @@ public class Category {
         return storeId;
     }
 
-    public static ArrayList<Category> getCategoriesListAsAdmin() {
+    public static ArrayList<Category> getCategoriesDB() {
         ArrayList<Category> categoriesList = new ArrayList<>();
-
-        if (!Model.getInstance().getUser().getRole().equals("admin")) {
-            Model.showError("Unauthorised", "This action can be done by an Admin.");
-            return categoriesList;
-        }
 
         try {
             String query = "SELECT * FROM Category WHERE storeId = ?";

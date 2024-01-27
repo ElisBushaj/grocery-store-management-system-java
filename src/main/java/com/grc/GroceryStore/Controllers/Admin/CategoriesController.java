@@ -32,7 +32,7 @@ public class CategoriesController implements Initializable {
         });
 
         this.categories.clear();
-        this.categories.addAll(Category.getCategoriesListAsAdmin());
+        this.categories.addAll(Category.getCategoriesDB());
         category_tbl.setItems(categories);
 
         clear_btn.setOnAction(event -> onClear());

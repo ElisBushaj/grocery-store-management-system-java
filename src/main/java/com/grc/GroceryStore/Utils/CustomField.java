@@ -16,8 +16,8 @@ public class CustomField {
 
     private static void addListener(TextField field, String regex){
         field.textProperty().addListener((observable, oldValue, newValue) -> {
-            String numericValue = newValue.replaceAll(regex, "");
-            field.setText(numericValue);
+            String value = newValue.replaceAll(regex, "");
+            field.setText(value);
         });
     }
 }
