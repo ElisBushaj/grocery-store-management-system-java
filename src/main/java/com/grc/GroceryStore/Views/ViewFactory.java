@@ -1,7 +1,5 @@
 package com.grc.GroceryStore.Views;
 
-import com.grc.GroceryStore.Controllers.Admin.AdminController;
-import com.grc.GroceryStore.Controllers.Cashier.CashierController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;

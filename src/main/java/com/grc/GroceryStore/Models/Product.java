@@ -115,8 +115,7 @@ public class Product {
 
                 Category category = Model.getInstance().getStore().findCategoryById(categoryId);
                 if(category == null){
-                    productList.clear();
-                    return productList;
+                    continue;
                 }
 
                 Product product = new Product(id, category, name, description, price, stock, supplierInfo, storeId);

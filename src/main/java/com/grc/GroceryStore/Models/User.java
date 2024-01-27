@@ -269,10 +269,7 @@ public class User {
 
             if (resultSet.next()) {
                 String storedPassword = resultSet.getString("password");
-
                 return PasswordHashing.verifyPassword(password, storedPassword);
-            } else {
-                System.out.println("User not found.");
             }
 
             statement.close();

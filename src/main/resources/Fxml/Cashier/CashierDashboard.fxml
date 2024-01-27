@@ -61,7 +61,7 @@
             <Font name="Arial" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="total_profit_lb2" layoutX="395.0" layoutY="487.0" prefHeight="33.0" prefWidth="64.0">
+      <Label fx:id="total_product_sales_lb" layoutX="395.0" layoutY="487.0" prefHeight="33.0" prefWidth="64.0">
          <font>
             <Font size="22.0" />
          </font>

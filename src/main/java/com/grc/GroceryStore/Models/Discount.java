@@ -22,37 +22,34 @@ public class Discount {
     }
 
     public static ArrayList<Discount> getDiscountsDB() {
-        System.out.println("1");
         ArrayList<Discount> discounts = new ArrayList<>();
         try {
-            String query = "SELECT * FROM Discount WHERE storeId=?";
+            String query = "SELECT * FROM Discount WHERE storeId = ?";
             PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
             statement.setInt(1, Model.getInstance().getStore().getId());
             ResultSet resultSet = statement.executeQuery();
-            System.out.println("2");
             while (resultSet.next()) {
+                int id = resultSet.getInt("id");
                 int productId = resultSet.getInt("productId");
+                double percentage = resultSet.getDouble("percentage");
+
                 Product product = Model.getInstance().getStore().findProductById(productId);
-                System.out.println("3");
                 if (product == null) {
-                    discounts.clear();
-                    return discounts;
+                    continue;
                 }
-                Discount discount = new Discount(resultSet.getInt("id"), product, resultSet.getDouble("percentage"), Model.getInstance().getStore().getId());
+
+                Discount discount = new Discount(id, product, percentage, Model.getInstance().getStore().getId());
                 discounts.add(discount);
             }
         } catch (SQLException e) {
             e.printStackTrace();
 
         }
-        System.out.println("4");
 
         return discounts;
     }
 
     public static Discount createDiscountAsAdmin(double percentage, int productId) {
-
-
         try {
             String query = "INSERT INTO Discount (productId, percentage, storeId) VALUES (?, ?, ?)";
             PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -74,8 +71,8 @@ public class Discount {
             } else {
                 throw new SQLException("Creating discount failed, no ID obtained.");
             }
+
         } catch (SQLException e) {
-            // Handle SQL exception appropriately
             e.printStackTrace();
         }
 
@@ -140,10 +137,10 @@ public class Discount {
 
     }
      public static boolean updateDiscountDB (int id , double percentage,int productId){
-
          if (!Model.getInstance().getUser().isAdmin(true)) {
              return false;
          }
+
          try {
              String query = "UPDATE Discount SET percentage = ? WHERE id = ? AND productId = ? AND storeId = ?";
              PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);

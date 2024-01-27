@@ -68,11 +68,9 @@ public class ProductPoints {
                 int priceInPoints = resultSet.getInt("priceInPoints");
                 int storeId = resultSet.getInt("storeId");
 
-                // Assuming you have a method to get a Product by its ID
                 Product product = Model.getInstance().getStore().findProductById(productId);
                 if(product == null){
-                    productPointsList.clear();
-                    return productPointsList;
+                    continue;
                 }
 
                 ProductPoints productPoints = new ProductPoints(id, product, priceInPoints, storeId);
@@ -147,21 +145,16 @@ public class ProductPoints {
 
             int rowsAffected = statement.executeUpdate();
 
-            System.out.println("1");
-
             if (rowsAffected > 0) {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
-                System.out.println("2");
 
                 if (generatedKeys.next()) {
                     int generatedId = generatedKeys.getInt(1);
 
                     Product product = Model.getInstance().getStore().findProductById(productId);
                     if(product == null){
-                        System.out.println("3");
                         return null;
                     }
-                    System.out.println("4");
 
                     return new ProductPoints(generatedId, product, priceInPoints, Model.getInstance().getStore().getId());
                 }

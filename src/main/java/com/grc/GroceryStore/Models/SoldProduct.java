@@ -36,10 +36,6 @@ public class SoldProduct {
         return id;
     }
 
-
-
-
-
     public int getReceiptId() {
         return receiptId.get();
     }
@@ -108,10 +104,10 @@ public class SoldProduct {
                 int storeId = resultSet.getInt("storeId");
 
                 Product product = Model.getInstance().getStore().findProductById(productId);
-                if(product==null){
-                    soldProducts.clear();
-                    return  soldProducts;
+                if(product == null){
+                    continue;
                 }
+
                 SoldProduct soldProduct = new SoldProduct(id, product, receiptId, price, paidMoney, paidPoints, discount, storeId);
                 soldProducts.add(soldProduct);
             }
@@ -124,7 +120,7 @@ public class SoldProduct {
 
         return soldProducts;
     }
-    public static ArrayList<SoldProduct> getSoldProductsByReceiptIdFromDB(int receiptId ,int storeId) {
+    public static ArrayList<SoldProduct> getSoldProductsByReceiptIdFromDB(int receiptId) {
         ArrayList<SoldProduct> soldProducts = new ArrayList<>();
 
         try {
@@ -142,18 +138,12 @@ public class SoldProduct {
                 double paidPoints = resultSet.getDouble("paidPoints");
                 double discount = resultSet.getDouble("discount");
 
-
-                // Assuming you have a method to retrieve the product based on its ID
                 Product product = Model.getInstance().getStore().findProductById(productId);
-
-                // Check if product exists
                 if (product == null) {
-                    // You may choose to handle this situation differently,
-                    // here I'm simply skipping this sold product
                     continue;
                 }
 
-                SoldProduct soldProduct = new SoldProduct(id, product, receiptId, price, paidMoney, paidPoints, discount, storeId);
+                SoldProduct soldProduct = new SoldProduct(id, product, receiptId, price, paidMoney, paidPoints, discount, Model.getInstance().getStore().getId());
                 soldProducts.add(soldProduct);
             }
 
@@ -161,7 +151,6 @@ public class SoldProduct {
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            // You might want to handle the exception more gracefully based on your application's requirements
         }
 
         return soldProducts;

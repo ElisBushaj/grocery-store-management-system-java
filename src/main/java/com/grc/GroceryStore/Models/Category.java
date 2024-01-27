@@ -140,6 +140,7 @@ public class Category {
 
         return null;
     }
+
     public static Category updateCategoryByIdAsAdmin(int categoryId, String newName) {
         if (!Model.getInstance().getUser().getRole().equals("admin")) {
             Model.showError("Unauthorised", "This action can be done by an Admin.");
@@ -158,18 +159,15 @@ public class Category {
             updateStatement.close();
 
             if (rowsAffected > 0) {
-                // Category successfully updated, retrieve the updated category
                 return getCategoryById(categoryId);
-            } else {
-                Model.showError("Error", "Category with ID " + categoryId + " not found or no changes were made.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // Handle SQL exceptions or return null based on the use case
         }
 
         return null;
     }
+
     private static Category getCategoryById(int categoryId) throws SQLException {
         String selectQuery = "SELECT * FROM Category WHERE id = ?";
         PreparedStatement selectStatement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(selectQuery);
@@ -178,7 +176,6 @@ public class Category {
         ResultSet resultSet = selectStatement.executeQuery();
 
         if (resultSet.next()) {
-            // Create and return a Category object from the retrieved data
             int id = resultSet.getInt("id");
             String name = resultSet.getString("name");
             int storeId = resultSet.getInt("storeId");
@@ -186,7 +183,6 @@ public class Category {
             return new Category(id, name, storeId);
         }
 
-        // Return null if the category with the specified ID is not found
         return null;
     }
 
