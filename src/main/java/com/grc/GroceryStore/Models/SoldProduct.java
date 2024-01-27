@@ -124,6 +124,48 @@ public class SoldProduct {
 
         return soldProducts;
     }
+    public static ArrayList<SoldProduct> getSoldProductsByReceiptIdFromDB(int receiptId ,int storeId) {
+        ArrayList<SoldProduct> soldProducts = new ArrayList<>();
+
+        try {
+            String query = "SELECT * FROM SoldProduct WHERE receiptId = ? AND storeId=?";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            statement.setInt(1, receiptId);
+            statement.setInt(2,Model.getInstance().getStore().getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int productId = resultSet.getInt("productId");
+                double price = resultSet.getDouble("price");
+                double paidMoney = resultSet.getDouble("paidMoney");
+                double paidPoints = resultSet.getDouble("paidPoints");
+                double discount = resultSet.getDouble("discount");
+
+
+                // Assuming you have a method to retrieve the product based on its ID
+                Product product = Model.getInstance().getStore().findProductById(productId);
+
+                // Check if product exists
+                if (product == null) {
+                    // You may choose to handle this situation differently,
+                    // here I'm simply skipping this sold product
+                    continue;
+                }
+
+                SoldProduct soldProduct = new SoldProduct(id, product, receiptId, price, paidMoney, paidPoints, discount, storeId);
+                soldProducts.add(soldProduct);
+            }
+
+            statement.close();
+            resultSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // You might want to handle the exception more gracefully based on your application's requirements
+        }
+
+        return soldProducts;
+    }
 
     public Product getProduct() {
         return product.get();

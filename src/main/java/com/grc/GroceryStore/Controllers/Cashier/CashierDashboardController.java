@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class CashierDashboardController implements Initializable {
@@ -14,11 +15,13 @@ public class CashierDashboardController implements Initializable {
     public Label total_profit_lb;
     public final ObservableList<Category> categories = Model.getInstance().getStore().getCategories();
     public final ObservableList<Product> products = Model.getInstance().getStore().getProducts();
+    public ArrayList<Integer> receiptIds = new ArrayList<>();
 
 
 
     private final ObservableList<SoldProduct> soldProducts = Model.getInstance().getStore().getSoldProducts();
     public TableView dashboard_tb;
+    public Label total_profit_lb2;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -33,12 +36,18 @@ public class CashierDashboardController implements Initializable {
 
 
        if(soldProducts.isEmpty()){
-           soldProducts.addAll(SoldProduct.getSoldProductsFromDB());
+           receiptIds = Receipt.getReceiptIdByUserId(Model.getInstance().getUser().getId(),Model.getInstance().getStore().getId());
+
+           for(int receiptId: receiptIds)
+           soldProducts.addAll(SoldProduct.getSoldProductsByReceiptIdFromDB(receiptId,Model.getInstance().getStore().getId()));
 
        }
         dashboard_tb.getSelectionModel().setSelectionMode(null);
         dashboard_tb.setItems(soldProducts);
         setTotalProfit();
+        setTotalProductSales();
+        welcome_lb.setText("Welcome "+Model.getInstance().getUser().getName());
+
 
     }
 
@@ -53,5 +62,10 @@ public class CashierDashboardController implements Initializable {
             total += product.getPaidMoney();
         }
         total_profit_lb.setText(Double.toString(total));
+    }
+    public void setTotalProductSales(){
+
+        total_profit_lb2.setText(Integer.toString(soldProducts.size()));
+
     }
 }

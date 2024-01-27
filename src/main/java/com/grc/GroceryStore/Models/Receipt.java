@@ -2,6 +2,10 @@ package com.grc.GroceryStore.Models;
 
 import javafx.beans.property.*;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Receipt {
@@ -68,4 +72,32 @@ public class Receipt {
     public IntegerProperty storeIdProperty() {
         return storeId;
     }
+
+
+
+    public static ArrayList<Integer> getReceiptIdByUserId(int userId, int storeId) {
+        ArrayList<Integer> receipts = new ArrayList<>();
+        String query = "SELECT id FROM Receipt WHERE userId = ? AND storeId = ?";
+        try {
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+
+            statement.setInt(1, userId);
+            statement.setInt(2, storeId);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                int receiptId = rs.getInt("id");
+                receipts.add(receiptId);
+            }
+
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            // Handle the SQL exception appropriately
+            e.printStackTrace();
+        }
+
+        return receipts;
+    }
 }
+
