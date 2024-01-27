@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
@@ -12,40 +13,58 @@
    <children>
       <AnchorPane prefHeight="615.0" prefWidth="700.0">
          <children>
-            <Label fx:id="welcome_lb" layoutX="43.0" layoutY="24.0" text="Welcome Elis!">
+            <Label fx:id="welcome_lb" layoutX="43.0" layoutY="24.0" prefHeight="29.0" prefWidth="208.0" text="Welcome Elis!">
                <font>
                   <Font name="Berlin Sans FB Demi Bold" size="25.0" />
                </font>
             </Label>
-            <Label fx:id="welcome_lb1" layoutX="609.0" layoutY="22.0" text="Role:">
+            <Label layoutX="609.0" layoutY="22.0" text="Role:">
                <font>
                   <Font name="Arial" size="15.0" />
                </font>
             </Label>
-            <Label fx:id="welcome_lb11" layoutX="600.0" layoutY="49.0" text="Admin" textOverrun="WORD_ELLIPSIS">
+            <Label layoutX="600.0" layoutY="49.0" text="Admin" textOverrun="WORD_ELLIPSIS">
                <font>
                   <Font name="Berlin Sans FB Demi Bold" size="18.0" />
                </font>
             </Label>
-            <TableView layoutX="102.0" layoutY="279.0" prefHeight="250.0" prefWidth="497.0">
+            <TableView fx:id="soldProduct_tb" layoutX="102.0" layoutY="279.0" prefHeight="250.0" prefWidth="497.0">
               <columns>
-                <TableColumn prefWidth="256.6666946411133" text="Product" />
-                  <TableColumn prefWidth="239.99996948242188" text="Price" />
+                 <TableColumn prefWidth="288.6665954589844" text="Product">
+                    <cellValueFactory>
+                       <PropertyValueFactory property="product" />
+                    </cellValueFactory>
+                 </TableColumn>
+                 <TableColumn prefWidth="290.666748046875" text="Price">
+                    <cellValueFactory>
+                       <PropertyValueFactory property="price" />
+                    </cellValueFactory>
+                 </TableColumn>
               </columns>
             </TableView>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="130.0" layoutX="118.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="130.0" layoutX="375.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
-            <Label fx:id="welcome_lb12" layoutX="301.0" layoutY="255.0" text="Sold Products">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e9e9e9" height="130.0" layoutX="118.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e9e9e9" height="130.0" layoutX="375.0" layoutY="94.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+            <Label layoutX="301.0" layoutY="255.0" text="Sold Products">
                <font>
                   <Font name="Arial" size="20.0" />
                </font>
             </Label>
-            <Label fx:id="welcome_lb13" layoutX="150.0" layoutY="109.0" text="Role:" textFill="#405c2c">
+            <Label layoutX="150.0" layoutY="109.0" text="Today sold Products :">
                <font>
                   <Font name="Arial" size="15.0" />
                </font>
             </Label>
-            <Label fx:id="welcome_lb131" layoutX="408.0" layoutY="109.0" text="Role:" textFill="#405c2c">
+            <Label layoutX="408.0" layoutY="109.0" text="Today Sales(in Eur) :">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="total_soldP_lb" layoutX="150.0" layoutY="141.0">
+               <font>
+                  <Font name="Arial" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="total_sales_lb" layoutX="414.0" layoutY="141.0">
                <font>
                   <Font name="Arial" size="15.0" />
                </font>

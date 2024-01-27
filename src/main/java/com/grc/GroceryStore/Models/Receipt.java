@@ -1,7 +1,8 @@
 package com.grc.GroceryStore.Models;
 
 import javafx.beans.property.*;
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,12 +28,47 @@ public class Receipt {
 
     public static ArrayList<Integer> getReceiptsIdsByUserId(int userId) {
         ArrayList<Integer> receipts = new ArrayList<>();
-        String query = "SELECT id FROM Receipt WHERE userId = ? AND storeId = ?";
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = today.format(formatter);
+
+        String query = "SELECT id FROM Receipt WHERE userId = ? AND storeId = ? AND date=?";
         try {
             PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
 
             statement.setInt(1, userId);
             statement.setInt(2, Model.getInstance().getStore().getId());
+            statement.setString(3,formattedDate);
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                int receiptId = rs.getInt("id");
+                receipts.add(receiptId);
+            }
+
+            rs.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return receipts;
+    }
+
+
+    public static ArrayList<Integer> getReceiptsIdsByDate() {
+        ArrayList<Integer> receipts = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = today.format(formatter);
+
+        String query = "SELECT id FROM Receipt  WHERE storeId = ? AND date=?";
+        try {
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+
+
+            statement.setInt(1, Model.getInstance().getStore().getId());
+            statement.setString(2,formattedDate);
             ResultSet rs = statement.executeQuery();
 
             while (rs.next()) {
