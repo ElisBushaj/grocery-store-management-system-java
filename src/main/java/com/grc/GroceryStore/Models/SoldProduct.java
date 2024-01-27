@@ -1,9 +1,6 @@
 package com.grc.GroceryStore.Models;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +9,7 @@ import java.util.ArrayList;
 
 public class SoldProduct {
     private final IntegerProperty id;
-    private final IntegerProperty productId;
+    private final ObjectProperty<Product> product;
     private final IntegerProperty receiptId;
     private final DoubleProperty price;
     private final DoubleProperty paidMoney;
@@ -20,9 +17,9 @@ public class SoldProduct {
     private final DoubleProperty discount;
     private final IntegerProperty storeId;
 
-    public SoldProduct(int id, int productId, int receiptId, double price, double paidMoney, double paidPoints, double discount, int storeId) {
+    public SoldProduct(int id, Product product, int receiptId, double price, double paidMoney, double paidPoints, double discount, int storeId) {
         this.id = new SimpleIntegerProperty(this, "Id", id);
-        this.productId = new SimpleIntegerProperty(this, "Product Id", productId);
+        this.product = new SimpleObjectProperty<>(this, "Product ", product);
         this.receiptId = new SimpleIntegerProperty(this, "Receipt Id", receiptId);
         this.price = new SimpleDoubleProperty(this, "Price", price);
         this.paidMoney = new SimpleDoubleProperty(this, "Paid Money", paidMoney);
@@ -39,13 +36,9 @@ public class SoldProduct {
         return id;
     }
 
-    public int getProductId() {
-        return productId.get();
-    }
 
-    public IntegerProperty productIdProperty() {
-        return productId;
-    }
+
+
 
     public int getReceiptId() {
         return receiptId.get();
@@ -114,7 +107,12 @@ public class SoldProduct {
                 double discount = resultSet.getDouble("discount");
                 int storeId = resultSet.getInt("storeId");
 
-                SoldProduct soldProduct = new SoldProduct(id, productId, receiptId, price, paidMoney, paidPoints, discount, storeId);
+                Product product = Model.getInstance().getStore().findProductById(productId);
+                if(product==null){
+                    soldProducts.clear();
+                    return  soldProducts;
+                }
+                SoldProduct soldProduct = new SoldProduct(id, product, receiptId, price, paidMoney, paidPoints, discount, storeId);
                 soldProducts.add(soldProduct);
             }
 
@@ -125,5 +123,13 @@ public class SoldProduct {
         }
 
         return soldProducts;
+    }
+
+    public Product getProduct() {
+        return product.get();
+    }
+
+    public ObjectProperty<Product> productProperty() {
+        return product;
     }
 }

@@ -30,7 +30,7 @@ public class StockController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if(categories.isEmpty()){
-            categories.addAll(Category.getCategoriesListAsAdmin());
+            categories.addAll(Category.getCategoriesDB());
         }
 
         category_chb.getItems().addAll(categories);
