@@ -66,13 +66,12 @@ public class Receipt {
     }
 
 
-    public static ArrayList<Integer> getReceiptsIdsByDate() {
+    public static ArrayList<Integer> getReceiptsIdsByDate(LocalDate date) {
         ArrayList<Integer> receipts = new ArrayList<>();
-        LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = today.format(formatter);
+        String formattedDate = date.format(formatter);
 
-        String query = "SELECT id FROM Receipt  WHERE storeId = ? AND date=?";
+        String query = "SELECT id FROM Receipt  WHERE storeId = ? AND date >= ?";
         try {
             PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
 

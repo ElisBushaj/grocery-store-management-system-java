@@ -34,7 +34,7 @@
                  <PropertyValueFactory property="product" />
               </cellValueFactory>
            </TableColumn>
-           <TableColumn prefWidth="319.0" text="Price">
+           <TableColumn prefWidth="319.0" text="Paid Money">
               <cellValueFactory>
                  <PropertyValueFactory property="paidMoney" />
               </cellValueFactory>
