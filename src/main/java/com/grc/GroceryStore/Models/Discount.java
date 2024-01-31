@@ -158,5 +158,10 @@ public class Discount {
              return false;
      }
     }
+
+    @Override
+    public String toString() {
+        return this.getPercentage() * 100 + "%";
+    }
 }
 

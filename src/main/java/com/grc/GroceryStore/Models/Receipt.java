@@ -1,11 +1,12 @@
 package com.grc.GroceryStore.Models;
 
 import javafx.beans.property.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,6 +21,15 @@ public class Receipt {
     public Receipt(int id, int customerId, int userId, Date date, double price, int storeId) {
         this.id = new SimpleIntegerProperty(this, "Id", id);
         this.customerId = new SimpleIntegerProperty(this, "Customer Id", customerId);
+        this.userId = new SimpleIntegerProperty(this, "User Id", userId);
+        this.date = new SimpleObjectProperty<>(this, "Date", date);
+        this.price = new SimpleDoubleProperty(this, "Price", price);
+        this.storeId = new SimpleIntegerProperty(this, "Store Id", storeId);
+    }
+
+    public Receipt(int id, int userId, Date date, double price, int storeId) {
+        this.id = new SimpleIntegerProperty(this, "Id", id);
+        this.customerId = new SimpleIntegerProperty();
         this.userId = new SimpleIntegerProperty(this, "User Id", userId);
         this.date = new SimpleObjectProperty<>(this, "Date", date);
         this.price = new SimpleDoubleProperty(this, "Price", price);
@@ -83,6 +93,61 @@ public class Receipt {
         }
 
         return receipts;
+    }
+
+    public static Receipt createReceiptDB(int customerId, int userId, double price) {
+        try {
+            String query = "INSERT INTO Receipt (customerId, userId, date, price, storeId) VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1, customerId);
+            statement.setInt(2, userId);
+            statement.setDouble(3, price);
+            statement.setInt(4, Model.getInstance().getStore().getId());
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    return new Receipt(generatedId, customerId, userId, new Date(), price, Model.getInstance().getStore().getId());
+                }
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static Receipt createReceiptDB(int userId, double price) {
+        try {
+            String query = "INSERT INTO Receipt (userId, date, price, storeId) VALUES (?, CURDATE(), ?, ?)";
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            statement.setInt(1, userId);
+            statement.setDouble(2, price);
+            statement.setInt(3, Model.getInstance().getStore().getId());
+
+            int rowsAffected = statement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    return new Receipt(generatedId, userId, new Date(), price, Model.getInstance().getStore().getId());
+                }
+            }
+
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public int getId() {

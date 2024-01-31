@@ -102,6 +102,15 @@ public class Store {
         return productPoints;
     }
 
+    public ProductPoints findProductPointsByProductId(int productId) {
+        for (ProductPoints productPoints : productPoints) {
+            if (productPoints.getProduct().getId() == productId) {
+                return productPoints;
+            }
+        }
+        return null;
+    }
+
     public Product findProductById(int targetId) {
         for (Product product : products) {
             if (product.getId() == targetId) {
@@ -117,6 +126,15 @@ public class Store {
         }
 
         return discounts;
+    }
+
+    public Discount findDiscountByProductId(int productId) {
+        for (Discount discount : discounts) {
+            if (discount.getProduct().getId() == productId) {
+                return discount;
+            }
+        }
+        return null;
     }
 
     public ObservableList<SoldProduct> getSoldProducts() {

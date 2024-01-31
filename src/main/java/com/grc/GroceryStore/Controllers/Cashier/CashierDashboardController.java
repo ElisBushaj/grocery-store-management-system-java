@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -16,7 +17,6 @@ public class CashierDashboardController implements Initializable {
     private final ObservableList<SoldProduct> soldProducts = Model.getInstance().getStore().getSoldProducts();
     public Label welcome_lb;
     public Label total_profit_lb;
-    public ArrayList<Integer> receiptIds = new ArrayList<>();
     public TableView<SoldProduct> dashboard_tb;
     public Label total_product_sales_lb;
 
@@ -30,18 +30,16 @@ public class CashierDashboardController implements Initializable {
             products.addAll(Product.getProductListDB());
         }
 
+        ArrayList<Integer> receiptIds = Receipt.getReceiptsIdsByUserId(Model.getInstance().getUser().getId());
 
-        if (soldProducts.isEmpty()) {
-            receiptIds = Receipt.getReceiptsIdsByUserId(Model.getInstance().getUser().getId());
-
-            for (int receiptId : receiptIds) {
-                soldProducts.addAll(SoldProduct.getSoldProductsByReceiptIdFromDB(receiptId));
-            }
-
+        soldProducts.clear();
+        for (int receiptId : receiptIds) {
+            soldProducts.addAll(SoldProduct.getSoldProductsByReceiptIdFromDB(receiptId));
         }
 
         dashboard_tb.getSelectionModel().setSelectionMode(null);
         dashboard_tb.setItems(soldProducts);
+
         setTotalProfit();
         setTotalProductSales();
         setWelcomeName();
@@ -57,10 +55,15 @@ public class CashierDashboardController implements Initializable {
         for (SoldProduct product : soldProducts) {
             total += product.getPaidMoney();
         }
-        total_profit_lb.setText(Double.toString(total));
+        total_profit_lb.setText(formatMoneyString(total));
     }
 
     public void setTotalProductSales() {
         total_product_sales_lb.setText(Integer.toString(soldProducts.size()));
+    }
+
+    private String formatMoneyString(double amount){
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        return decimalFormat.format(amount) + "€";
     }
 }

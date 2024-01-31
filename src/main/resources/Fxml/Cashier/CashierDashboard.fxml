@@ -1,67 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Font?>
-
+<?import javafx.scene.text.*?>
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grc.GroceryStore.Controllers.Cashier.CashierDashboardController">
    <AnchorPane prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-      <Label layoutX="610.0" layoutY="38.0" text="Cashier" textFill="#090909">
+      <Label layoutX="607.0" layoutY="49.0" text="Cashier" textFill="#090909" AnchorPane.rightAnchor="41.0">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>
       </Label>
-      <Label fx:id="welcome_lb" layoutX="35.0" layoutY="26.0" prefHeight="45.0" prefWidth="215.0">
+      <Label fx:id="welcome_lb" layoutX="35.0" layoutY="26.0" prefHeight="45.0" AnchorPane.leftAnchor="35.0">
          <font>
             <Font name="System Bold Italic" size="30.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dbe0d7" height="91.0" layoutX="479.0" layoutY="452.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
-      <Label layoutX="493.0" layoutY="463.0" prefHeight="17.0" prefWidth="117.0" text=" Total Sales (in Eur) :" textOverrun="LEADING_ELLIPSIS">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dbe0d7" height="91.0" layoutX="493.0" layoutY="463.0" stroke="BLACK" strokeType="INSIDE" width="179.0" AnchorPane.bottomAnchor="46.0" AnchorPane.rightAnchor="28.0" />
+      <Label layoutX="506.0" layoutY="472.0" prefHeight="17.0" prefWidth="117.0" text="Total Sales (in Eur):" textOverrun="LEADING_ELLIPSIS" AnchorPane.bottomAnchor="111.0" AnchorPane.rightAnchor="77.0">
          <font>
             <Font name="Arial" size="12.0" />
          </font></Label>
-      <Label fx:id="total_profit_lb" layoutX="568.0" layoutY="481.0" prefHeight="33.0" prefWidth="64.0">
+      <Label fx:id="total_profit_lb" layoutX="506.0" layoutY="492.0" prefHeight="33.0" prefWidth="144.0" text="2" AnchorPane.bottomAnchor="75.0" AnchorPane.rightAnchor="50.0">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <TableView fx:id="dashboard_tb" layoutX="71.0" layoutY="130.0" prefHeight="321.0" prefWidth="579.0">
+      <TableView fx:id="dashboard_tb" layoutX="28.0" layoutY="93.0" prefHeight="351.0" prefWidth="644.0" AnchorPane.bottomAnchor="156.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="93.0">
         <columns>
-           <TableColumn prefWidth="288.6665954589844" text="Product">
+           <TableColumn prefWidth="318.0" text="Product">
               <cellValueFactory>
                  <PropertyValueFactory property="product" />
               </cellValueFactory>
            </TableColumn>
-           <TableColumn prefWidth="290.666748046875" text="Price">
+           <TableColumn prefWidth="319.0" text="Price">
               <cellValueFactory>
-                 <PropertyValueFactory property="price" />
+                 <PropertyValueFactory property="paidMoney" />
               </cellValueFactory>
            </TableColumn>
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
-      <Label layoutX="610.0" layoutY="15.0" text="Role:">
+      <Label layoutX="607.0" layoutY="26.0" text="Role:" AnchorPane.rightAnchor="60.0">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="292.0" layoutY="94.0" prefHeight="36.0" prefWidth="155.0" text="Sold products" textOverrun="LEADING_ELLIPSIS">
-         <font>
-            <Font name="Arial" size="22.0" />
-         </font>
-      </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dbe0d7" height="91.0" layoutX="299.0" layoutY="452.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
-      <Label layoutX="322.0" layoutY="463.0" prefHeight="17.0" prefWidth="137.0" text="Your total sold products:" textOverrun="LEADING_ELLIPSIS">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dbe0d7" height="91.0" layoutX="304.0" layoutY="463.0" stroke="BLACK" strokeType="INSIDE" width="179.0" AnchorPane.bottomAnchor="46.0" AnchorPane.rightAnchor="217.0" />
+      <Label layoutX="325.0" layoutY="472.0" prefHeight="17.0" prefWidth="137.0" text="Your total sold products:" textOverrun="LEADING_ELLIPSIS" AnchorPane.bottomAnchor="111.0" AnchorPane.rightAnchor="238.0">
          <font>
             <Font name="Arial" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="total_product_sales_lb" layoutX="395.0" layoutY="487.0" prefHeight="33.0" prefWidth="64.0">
+      <Label fx:id="total_product_sales_lb" layoutX="325.0" layoutY="492.0" prefHeight="33.0" prefWidth="144.0" text="1" AnchorPane.bottomAnchor="75.0" AnchorPane.rightAnchor="231.0">
          <font>
             <Font size="22.0" />
          </font>

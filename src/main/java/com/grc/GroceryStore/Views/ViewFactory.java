@@ -41,38 +41,32 @@ public class ViewFactory {
     }
 
     public VBox getCashierDashboardView() {
-        if (cashierDashboardView == null){
-            try {
-                cashierDashboardView = new FXMLLoader(getClass().getResource("/Fxml/Cashier/CashierDashboard.fxml")).load();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        try {
+            cashierDashboardView = new FXMLLoader(getClass().getResource("/Fxml/Cashier/CashierDashboard.fxml")).load();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return cashierDashboardView;
     }
 
     public VBox getSellView() {
-        if (sellView == null){
-            try {
-                sellView = new FXMLLoader(getClass().getResource("/Fxml/Cashier/SellView.fxml")).load();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        try {
+            sellView = new FXMLLoader(getClass().getResource("/Fxml/Cashier/SellView.fxml")).load();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return sellView;
     }
 
     public VBox getCustomerView() {
-        if (customerView == null){
-            try {
-                customerView = new FXMLLoader(getClass().getResource("/Fxml/Cashier/CustomerView.fxml")).load();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
+        try {
+            customerView = new FXMLLoader(getClass().getResource("/Fxml/Cashier/CustomerView.fxml")).load();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
         return customerView;
     }
 
@@ -187,6 +181,9 @@ public class ViewFactory {
             e.printStackTrace();
         }
         Stage stage = new Stage();
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
+
         stage.setScene(scene);
 
         stage.setTitle("Grocery Store");

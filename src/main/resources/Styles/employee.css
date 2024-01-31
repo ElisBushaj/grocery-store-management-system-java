@@ -16,3 +16,11 @@
 .title{
     -fx-font-size: 30;
 }
+
+.small_button{
+    -fx-background-color: #2f2c2c;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-pref-width: 40;
+    -fx-font-weight: 800;
+}

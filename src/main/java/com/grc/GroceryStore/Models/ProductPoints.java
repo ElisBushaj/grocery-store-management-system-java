@@ -1,6 +1,9 @@
 package com.grc.GroceryStore.Models;
 
-import javafx.beans.property.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -166,5 +169,10 @@ public class ProductPoints {
         }
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return Integer.toString(this.getPriceInPoints());
     }
 }

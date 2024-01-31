@@ -156,7 +156,6 @@ public class Customer {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int customerId = generatedKeys.getInt(1);
-                    // Create and return a Customer object using the retrieved customer ID and other details
                     return new Customer(customerId, name, lastname, phoneNumber, gender, points, storeId);
                 }
             }
@@ -164,7 +163,7 @@ public class Customer {
             e.printStackTrace();
         }
 
-        return null; // Customer creation failed
+        return null;
     }
 
     public static Customer updateCustomerById(int id, String name, String lastname, String phoneNumber, String gender, int points) {
@@ -214,5 +213,9 @@ public class Customer {
         return false;
     }
 
+    @Override
+    public String toString(){
+        return this.getName() + " " + this.getLastname();
+    }
 
 }

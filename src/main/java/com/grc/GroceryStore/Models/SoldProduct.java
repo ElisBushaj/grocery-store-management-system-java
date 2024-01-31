@@ -1,6 +1,7 @@
 package com.grc.GroceryStore.Models;
 
 import javafx.beans.property.*;
+import javafx.collections.ObservableList;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -154,6 +155,132 @@ public class SoldProduct {
         }
 
         return soldProducts;
+    }
+
+    public static boolean createSoldProductsCashDB(ObservableList<CartProduct> cartProducts, int receiptId) {
+        if (cartProducts == null || cartProducts.isEmpty()) {
+            return false;  // Nothing to insert
+        }
+
+        try {
+            String query = "INSERT INTO SoldProduct (productId, receiptId, price, paidMoney, paidPoints, discount, storeId) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String removeStockQuery = "UPDATE Product SET stock = ? WHERE id = ?";
+
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            PreparedStatement removeStockStatement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(removeStockQuery);
+
+            for (CartProduct cartProduct : cartProducts) {
+                for(int i = 0; i < cartProduct.getQTY(); i++) {
+                    statement.setInt(1, cartProduct.getId());
+                    statement.setInt(2, receiptId);
+                    statement.setDouble(3, cartProduct.getPrice());
+                    statement.setDouble(4, cartProduct.getPriceAfterDiscount());
+                    statement.setDouble(5, 0);
+                    if (cartProduct.getDiscount() == null) {
+                        statement.setDouble(6, 0);
+                    } else {
+                        statement.setDouble(6, cartProduct.getDiscount().getPercentage());
+                    }
+                    statement.setInt(7, cartProduct.getStoreId());
+                    statement.addBatch();
+
+                    removeStockStatement.setInt(1, cartProduct.getStock());
+                    removeStockStatement.setInt(2, cartProduct.getId());
+                    removeStockStatement.addBatch();
+                }
+            }
+            int[] rowsAffectedStock = removeStockStatement.executeBatch();
+            removeStockStatement.close();
+
+            // Check if all batches were successful
+            for (int row : rowsAffectedStock) {
+                if (row <= 0) {
+                    return false;
+                }
+            }
+
+            int[] rowsAffected = statement.executeBatch();
+            statement.close();
+
+            // Check if all batches were successful
+            for (int row : rowsAffected) {
+                if (row <= 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean createSoldProductsCashAndPointsDB(ObservableList<CartProduct> cartProducts, int receiptId) {
+        if (cartProducts == null || cartProducts.isEmpty()) {
+            return false;  // Nothing to insert
+        }
+
+        try {
+            String query = "INSERT INTO SoldProduct (productId, receiptId, price, paidMoney, paidPoints, discount, storeId) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String removeStockQuery = "UPDATE Product SET stock = ? WHERE id = ?";
+
+            PreparedStatement statement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(query);
+            PreparedStatement removeStockStatement = Model.getInstance().getDatabaseDriver().getConnection().prepareStatement(removeStockQuery);
+
+            for (CartProduct cartProduct : cartProducts) {
+                for(int i = 0; i < cartProduct.getQTY(); i++) {
+                    statement.setInt(1, cartProduct.getId());
+                    statement.setInt(2, receiptId);
+                    statement.setDouble(3, cartProduct.getPrice());
+
+                    if (cartProduct.getPoints() == null) {
+                        statement.setDouble(4, cartProduct.getPriceAfterDiscount());
+                        statement.setDouble(5, 0);
+                    } else {
+                        statement.setDouble(4, 0);
+                        statement.setDouble(5, cartProduct.getPoints().getPriceInPoints());
+                    }
+
+                    if (cartProduct.getDiscount() == null) {
+                        statement.setDouble(6, 0);
+                    } else {
+                        statement.setDouble(6, cartProduct.getDiscount().getPercentage());
+                    }
+
+                    statement.setInt(7, cartProduct.getStoreId());
+                    statement.addBatch();
+
+                    removeStockStatement.setInt(1, cartProduct.getStock());
+                    removeStockStatement.setInt(2, cartProduct.getId());
+                    removeStockStatement.addBatch();
+                }
+            }
+            int[] rowsAffectedStock = removeStockStatement.executeBatch();
+            removeStockStatement.close();
+
+            // Check if all batches were successful
+            for (int row : rowsAffectedStock) {
+                if (row <= 0) {
+                    return false;
+                }
+            }
+
+            int[] rowsAffected = statement.executeBatch();
+            statement.close();
+
+            // Check if all batches were successful
+            for (int row : rowsAffected) {
+                if (row <= 0) {
+                    return false;
+                }
+            }
+
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Product getProduct() {
