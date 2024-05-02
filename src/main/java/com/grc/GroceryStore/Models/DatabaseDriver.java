@@ -8,9 +8,9 @@ public class DatabaseDriver {
 
     public DatabaseDriver(){
         try {
-            String url = "jdbc:mysql://mysql-3ea8bd6-bushajelis2-24c7.a.aivencloud.com:20317/grocery-store";
-            String user = "avnadmin";
-            String password = "AVNS_F-kimu0XN-eHkitxbjL";
+            String url = "jdbc:mysql://mysql:20317/grocery-store";
+            String user = "admin";
+            String password = "admin";
             connection = DriverManager.getConnection(url, user, password);
         } catch (Exception e){
             e.printStackTrace();
